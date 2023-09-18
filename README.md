@@ -1,4 +1,6 @@
-# Assignment 1
+# HDL Ethernet Receiver
+
+Simple ethernet receiver implemented in SystemVerilog.
 
 ## Setup
 
@@ -26,6 +28,8 @@
     ```
 
 ## Run
+
+The test script is `test_recv.py`. To view the available arguments, run with the `-h/--help` argument:
 
 ```sh
 python test_recv.py -h
