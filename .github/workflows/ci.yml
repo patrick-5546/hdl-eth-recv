@@ -17,4 +17,4 @@ jobs:
         config_file: '.veriblelint'
         paths: |
           ./src
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.GH_TOKEN }}
