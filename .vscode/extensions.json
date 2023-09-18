@@ -1,0 +1,17 @@
+{
+    "recommendations": [
+        "bierner.github-markdown-preview",
+        "cameron.vscode-pytest",
+        "christian-kohler.path-intellisense",
+        "davidanson.vscode-markdownlint",
+        "gruntfuggly.todo-tree",
+        "mshr-h.veriloghdl",
+        "ms-python.black-formatter",
+        "ms-python.flake8",
+        "ms-python.isort",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "njpwerner.autodocstring",
+        "njqdev.vscode-python-typehint",
+    ]
+}

@@ -1,0 +1,6 @@
+# Python
+.venv/
+*.pyc
+
+# Cocotb
+sim_build/
