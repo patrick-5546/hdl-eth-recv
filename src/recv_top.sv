@@ -5,7 +5,7 @@ module recv_top (
 );
 
   always_ff @(clk) begin
-    q = d;
+    q <= d;
   end
 
 endmodule
