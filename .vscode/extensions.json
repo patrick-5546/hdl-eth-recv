@@ -4,6 +4,7 @@
         "cameron.vscode-pytest",
         "christian-kohler.path-intellisense",
         "davidanson.vscode-markdownlint",
+        "github.vscode-github-actions",
         "gruntfuggly.todo-tree",
         "mshr-h.veriloghdl",
         "ms-python.black-formatter",
