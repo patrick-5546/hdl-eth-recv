@@ -5,6 +5,7 @@
         "editor.formatOnSave": true,
     },
     "verilog.linting.linter": "modelsim",
+    "verilog.linting.modelsim.work": "sim_build/cli",
     "verilog.languageServer.veribleVerilogLs.enabled": true,
     "verilog.languageServer.veribleVerilogLs.path": "/ubc/ece/home/ugrads/p/pat5546/.local/bin/verible-verilog-ls",
     "verilog.formatting.systemVerilog.formatter": "verible-verilog-format",
