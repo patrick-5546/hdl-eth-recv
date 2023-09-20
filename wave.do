@@ -1,10 +1,11 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
 add wave -noupdate /recv_top/clk
-add wave -noupdate /recv_top/d
-add wave -noupdate /recv_top/q
+add wave -noupdate /recv_top/rst
+add wave -noupdate /recv_top/data
+add wave -noupdate /recv_top/out
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {9002 ns} 0}
+WaveRestoreCursors {{Cursor 1} {9926 ns} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
@@ -20,4 +21,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ns} {15824 ns}
+WaveRestoreZoom {0 ns} {23142 ns}
