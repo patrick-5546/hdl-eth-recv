@@ -10,13 +10,18 @@ VERILOG_SOURCES = [
 
 
 class ModelsimCustom(Modelsim):
-    def run(self):
+    def __init__(self, *argv, **kwargs):
         # color cli output
-        if not args.gui:
+        gui = kwargs["gui"] if "gui" in kwargs else False
+        if not gui:
             # https://docs.cocotb.org/en/stable/building.html#envvar-COCOTB_ANSI_OUTPUT
             os.environ["COCOTB_ANSI_OUTPUT"] = "1"
 
-        super().run()
+        # gui and cli files conflict with each other, so put in separate directories
+        sim_build = kwargs["sim_build"] if "sim_build" in kwargs else "sim_build"
+        sim_build = os.path.join(sim_build, "gui" if gui else "cli")
+
+        super().__init__(sim_build=sim_build, *argv, **kwargs)
 
     def do_script(self):
         """Overridden to run and load waveform in gui."""
@@ -37,8 +42,6 @@ def test_recv(args):
         toplevel="recv_top",
         module="recv_cocotb",
         waves=True,
-        # gui and cli files conflict with each other, so put in separate directories
-        sim_build=os.path.join("sim_build", "gui" if args.gui else "cli"),
         gui=args.gui,
     ).run()
 
