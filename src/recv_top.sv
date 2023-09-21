@@ -11,11 +11,23 @@ module recv_top (
 );
 
   always_ff @(posedge clk) begin
-    if (rst) begin
-      out <= 8'b0;
-    end else begin
-      out <= data;
-    end
+    out <= data;
   end
+
+  // always_ff @(posedge clk) begin
+  //   if (rst) begin
+  //     out   <= 8'b0;
+  //     ready <= 1'b1;
+  //     vld   <= 1'b0;
+  //   end else if (data != 8'hff) begin
+  //     out   <= 8'b0;
+  //     ready <= 1'b0;
+  //     vld   <= 1'b0;
+  //   end else begin
+  //     out   <= data;
+  //     ready <= 1'b0;
+  //     vld   <= 1'b1;
+  //   end
+  // end
 
 endmodule
