@@ -57,12 +57,19 @@ module recv_top #(
         end
       end
       PREAMBLE: begin
-        if (data == 8'b1010_1010) begin
+        if (data != 8'b1010_1010) begin
           next_state = ERROR;
         end else if (state_counter >= 16'h7) begin
-          next_state = MACDST;
+          next_state = SFD;
         end else begin
           next_state = PREAMBLE;
+        end
+      end
+      SFD: begin
+        if (data != 8'b1010_1011) begin
+          next_state = ERROR;
+        end else begin
+          next_state = MACDST;
         end
       end
       MACDST: begin
