@@ -57,7 +57,7 @@ module recv_top #(
         end
       end
       PREAMBLE: begin
-        if (data != 8'b1010_1010) begin
+        if (data_d1 != 8'b1010_1010) begin
           next_state = ERROR;
         end else if (state_counter >= 16'h7 - 16'h1) begin
           next_state = SFD;
@@ -66,14 +66,14 @@ module recv_top #(
         end
       end
       SFD: begin
-        if (data != 8'b1010_1011) begin
+        if (data_d1 != 8'b1010_1011) begin
           next_state = ERROR;
         end else begin
           next_state = MACDST;
         end
       end
       MACDST: begin
-        if (data != DEST_MAC_ADDR[state_counter*8+:8]) begin
+        if (data_d1 != DEST_MAC_ADDR[state_counter*8+:8]) begin
           next_state = IDLE;
         end else if (state_counter >= 16'h6 - 16'h1) begin
           next_state = MACSRC;
@@ -103,7 +103,7 @@ module recv_top #(
         end
       end
       FCS: begin
-        if (data != (lrc ^ 8'hFF) + 1) begin
+        if (data_d1 != (lrc ^ 8'hFF) + 1) begin
           next_state = ERROR;
         end else if (state_counter >= 16'h4 - 16'h1) begin
           next_state = SUCCESS;
@@ -160,6 +160,13 @@ module recv_top #(
       data_d4 <= data_d3;
       data_d5 <= data_d4;
       data_d6 <= data_d5;
+    end else if (!rst) begin
+      data_d1 <= data;
+      data_d2 <= 8'h0;
+      data_d3 <= 8'h0;
+      data_d4 <= 8'h0;
+      data_d5 <= 8'h0;
+      data_d6 <= 8'h0;
     end else begin
       data_d1 <= 8'h0;
       data_d2 <= 8'h0;
