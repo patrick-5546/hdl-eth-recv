@@ -27,7 +27,7 @@ module recv_top #(
   } state_t;
 
   logic [15:0] payload_length, state_counter;
-  logic [7:0] data_d1, data_d2, data_d3, data_d4, data_d5, next_out;
+  logic [7:0] data_d1, data_d2, data_d3, data_d4, data_d5, data_d6;
   logic [7:0] lrc;
   logic [3:0] state, next_state;
 
@@ -123,7 +123,7 @@ module recv_top #(
         ready = 1'b0;
       end
       PLLEN, PL, FCS: begin
-        out   = next_out;
+        out   = data_d6;
         vld   = 1'b1;
         ready = 1'b0;
       end
@@ -147,19 +147,19 @@ module recv_top #(
 
   always_ff @(posedge clk) begin : nextOutLogic
     if (!rst && (state == MACSRC || state == PLLEN || state == PL || state == FCS)) begin
-      data_d1  <= data;
-      data_d2  <= data_d1;
-      data_d3  <= data_d2;
-      data_d4  <= data_d3;
-      data_d5  <= data_d4;
-      next_out <= data_d5;
+      data_d1 <= data;
+      data_d2 <= data_d1;
+      data_d3 <= data_d2;
+      data_d4 <= data_d3;
+      data_d5 <= data_d4;
+      data_d6 <= data_d5;
     end else begin
-      data_d1  <= 8'h0;
-      data_d2  <= 8'h0;
-      data_d3  <= 8'h0;
-      data_d4  <= 8'h0;
-      data_d5  <= 8'h0;
-      next_out <= 8'h0;
+      data_d1 <= 8'h0;
+      data_d2 <= 8'h0;
+      data_d3 <= 8'h0;
+      data_d4 <= 8'h0;
+      data_d5 <= 8'h0;
+      data_d6 <= 8'h0;
     end
   end
 
