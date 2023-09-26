@@ -53,16 +53,16 @@ module recv_top #(
         if (start) begin
           next_state = PREAMBLE;
         end else begin
-          next_state = IDLE;
+          next_state = state;
         end
       end
       PREAMBLE: begin
         if (data != 8'b1010_1010) begin
           next_state = ERROR;
-        end else if (state_counter >= 16'h7) begin
+        end else if (state_counter >= 16'h7 - 16'h1) begin
           next_state = SFD;
         end else begin
-          next_state = PREAMBLE;
+          next_state = state;
         end
       end
       SFD: begin
@@ -75,40 +75,40 @@ module recv_top #(
       MACDST: begin
         if (data != DEST_MAC_ADDR[state_counter*8+:8]) begin
           next_state = IDLE;
-        end else if (state_counter >= 16'h6) begin
+        end else if (state_counter >= 16'h6 - 16'h1) begin
           next_state = MACSRC;
         end else begin
-          next_state = MACDST;
+          next_state = state;
         end
       end
       MACSRC: begin
-        if (state_counter >= 16'h6) begin
+        if (state_counter >= 16'h6 - 16'h1) begin
           next_state = PLLEN;
         end else begin
-          next_state = MACSRC;
+          next_state = state;
         end
       end
       PLLEN: begin
-        if (state_counter >= 16'h2) begin
+        if (state_counter >= 16'h2 - 16'h1) begin
           next_state = PL;
         end else begin
-          next_state = PLLEN;
+          next_state = state;
         end
       end
       PL: begin
-        if (state_counter >= payload_length) begin
+        if (state_counter >= payload_length - 16'h1) begin
           next_state = FCS;
         end else begin
-          next_state = PL;
+          next_state = state;
         end
       end
       FCS: begin
         if (data != (lrc ^ 8'hFF) + 1) begin
           next_state = ERROR;
-        end else if (state_counter >= 16'h4) begin
+        end else if (state_counter >= 16'h4 - 16'h1) begin
           next_state = SUCCESS;
         end else begin
-          next_state = FCS;
+          next_state = state;
         end
       end
       SUCCESS: next_state = IDLE;
