@@ -130,7 +130,7 @@ module recv_top #(
         ready = 1'b0;
       end
       PLLEN, PL, FCS: begin
-        out   = data_q6;
+        out   = (state == FCS || (state == PL && state_counter >= 4)) ? data_q4 : data_q6;
         vld   = 1'b1;
         ready = 1'b0;
       end
@@ -152,7 +152,7 @@ module recv_top #(
     endcase
   end
 
-  always_ff @(posedge clk) begin : nextOutLogic
+  always_ff @(posedge clk) begin : delayLogic
     if (!rst && (state == MACSRC || state == PLLEN || state == PL || state == FCS)) begin
       data_q  <= data;
       data_q1 <= data_q;
