@@ -5,7 +5,7 @@ add wave -noupdate /recv_top/rst
 add wave -noupdate /recv_top/ready
 add wave -noupdate -group in /recv_top/start
 add wave -noupdate -group in /recv_top/data
-add wave -noupdate /recv_top/data_d1
+add wave -noupdate /recv_top/data_q
 add wave -noupdate -radix decimal /recv_top/payload_length
 add wave -noupdate /recv_top/lrc
 add wave -noupdate /recv_top/next_state
