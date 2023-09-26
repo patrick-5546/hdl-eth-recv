@@ -1,4 +1,6 @@
-module recv_top (
+module recv_top #(
+    parameter logic [47:0] DEST_MAC_ADDR = 48'h00_0a_95_9d_68_16
+) (
     output logic [7:0] out,
     output logic vld,
     output logic ready,
@@ -23,8 +25,6 @@ module recv_top (
     SUCCESS,
     ERROR
   } state_t;
-
-  localparam mac_addr_t DestMacAddr = 48'h00_0a_95_9d_68_16;
 
   logic [15:0] payload_length, state_counter;
   logic [7:0] data_d1, data_d2, data_d3, data_d4, data_d5, next_out;
@@ -66,7 +66,7 @@ module recv_top (
         end
       end
       MACDST: begin
-        if (data != DestMacAddr[state_counter*8+:8]) begin
+        if (data != DEST_MAC_ADDR[state_counter*8+:8]) begin
           next_state = IDLE;
         end else if (state_counter >= 16'h6) begin
           next_state = MACSRC;
