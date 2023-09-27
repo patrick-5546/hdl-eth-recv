@@ -14,7 +14,7 @@ add wave -noupdate -radix decimal /recv_top/state_counter
 add wave -noupdate -expand -group out /recv_top/vld
 add wave -noupdate -expand -group out /recv_top/out
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {11500 ns} 0}
+WaveRestoreCursors {{Cursor 1} {41281 ns} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
@@ -30,4 +30,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ns} {40268 ns}
+WaveRestoreZoom {0 ns} {47776 ns}
