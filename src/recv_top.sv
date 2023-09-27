@@ -73,7 +73,7 @@ module recv_top #(
         end
       end
       MACDST: begin
-        if (data_q != DEST_MAC_ADDR[state_counter*8+:8]) begin
+        if (data_q != DEST_MAC_ADDR[(5-state_counter)*8+:8]) begin
           next_state = IDLE;
         end else if (state_counter >= 16'h6 - 16'h1) begin
           next_state = MACSRC;
@@ -182,7 +182,7 @@ module recv_top #(
 
   always_ff @(posedge clk) begin : payloadLengthLogic
     if (!rst && (state == PLLEN)) begin
-      payload_length[state_counter*8+:8] <= data_q;
+      payload_length[(1-state_counter)*8+:8] <= data_q;
     end else if (!rst && (state == PL)) begin
       payload_length <= payload_length;
     end else begin

@@ -118,8 +118,8 @@ async def monitor(dut):
         await RisingEdge(dut.clk)
 
     mac_src, payload, err = out_int[:6], out_int[6:-1], out_int[-1]
-    mac_src = ":".join([hex(b)[2:].zfill(2) for b in mac_src[::-1]])
-    payload = "".join([chr(b) for b in payload[::-1]])
+    mac_src = ":".join([hex(b)[2:].zfill(2) for b in mac_src])
+    payload = "".join([chr(b) for b in payload])
     if err:
         dut._log.info("Monitor: incorrect fcs")
     else:
@@ -133,16 +133,16 @@ def parse_mac_address(mac_str):
     """
     Example
         Input: "00:0a:95:9d:68:16"
-        Output: [16, 68, 9d, 95, 0a, 00]
+        Output: [0, 10, 149, 157, 104, 22]
     """
-    return [int(b, 16) for b in mac_str.split(":")][::-1]
+    return [int(b, 16) for b in mac_str.split(":")]
 
 
 def get_pllen_bytes(payload_str):
     payload_len = len(payload_str)
     payload_bytes = [
-        payload_len & 0xFF,
         payload_len >> 8,
+        payload_len & 0xFF,
     ]
     return payload_bytes
 
@@ -151,9 +151,9 @@ def parse_payload(payload_str):
     """
     Example
         Input: "Hello World!"
-        Output: [33, 100, 108, 114, 111, 87, 32, 111, 108, 108, 101, 72]
+        Output: [72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33]
     """
-    return [ord(c) for c in payload_str][::-1]
+    return [ord(c) for c in payload_str]
 
 
 def compute_fcs_bytes(macdst_bytes, macsrc_bytes, pllen_bytes, payload_bytes):
