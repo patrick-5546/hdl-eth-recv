@@ -12,7 +12,17 @@ module recv_top #(
     input logic rst
 );
 
-  typedef logic [47:0] mac_addr_t;
+  // state lengths
+  localparam logic [15:0] PreambleLength = 16'h7;
+  localparam logic [15:0] SFDLength = 16'h1;
+  localparam logic [15:0] MACLength = 16'h6;
+  localparam logic [15:0] PLLenLength = 16'h2;
+  localparam logic [15:0] FCSLength = 16'h4;
+
+  // data expected values
+  localparam logic [7:0] PreambleOctet = 8'b1010_1010;
+  localparam logic [7:0] SFDOctet = 8'b1010_1011;
+
   typedef enum logic [3:0] {
     IDLE,
     PREAMBLE,
@@ -57,39 +67,41 @@ module recv_top #(
         end
       end
       PREAMBLE: begin
-        if (data_q != 8'b1010_1010) begin
+        if (data_q != PreambleOctet) begin
           next_state = ERROR;
-        end else if (state_counter >= 16'h7 - 16'h1) begin
+        end else if (state_counter >= PreambleLength - 16'h1) begin
           next_state = SFD;
         end else begin
           next_state = state;
         end
       end
       SFD: begin
-        if (data_q != 8'b1010_1011) begin
+        if (data_q != SFDOctet) begin
           next_state = ERROR;
-        end else begin
+        end else if (state_counter >= SFDLength - 16'h1) begin
           next_state = MACDST;
+        end else begin
+          next_state = state;
         end
       end
       MACDST: begin
         if (data_q != DEST_MAC_ADDR[(5-state_counter)*8+:8]) begin
           next_state = IDLE;
-        end else if (state_counter >= 16'h6 - 16'h1) begin
+        end else if (state_counter >= MACLength - 16'h1) begin
           next_state = MACSRC;
         end else begin
           next_state = state;
         end
       end
       MACSRC: begin
-        if (state_counter >= 16'h6 - 16'h1) begin
+        if (state_counter >= MACLength - 16'h1) begin
           next_state = PLLEN;
         end else begin
           next_state = state;
         end
       end
       PLLEN: begin
-        if (state_counter >= 16'h2 - 16'h1) begin
+        if (state_counter >= PLLenLength - 16'h1) begin
           next_state = PL;
         end else begin
           next_state = state;
@@ -105,7 +117,7 @@ module recv_top #(
       FCS: begin
         if (data_q != (lrc ^ 8'hFF) + 1) begin
           next_state = ERROR;
-        end else if (state_counter >= 16'h4 - 16'h1) begin
+        end else if (state_counter >= FCSLength - 16'h1) begin
           next_state = SUCCESS;
         end else begin
           next_state = state;
