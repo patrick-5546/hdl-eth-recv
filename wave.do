@@ -2,7 +2,7 @@ onerror {resume}
 quietly WaveActivateNextPane {} 0
 add wave -noupdate /recv_top/clk
 add wave -noupdate /recv_top/rst
-add wave -noupdate /recv_top/ready
+add wave -noupdate /recv_top/rdy
 add wave -noupdate -expand -group in /recv_top/start
 add wave -noupdate -expand -group in /recv_top/data
 add wave -noupdate -expand -group {state logic} /recv_top/data_q
