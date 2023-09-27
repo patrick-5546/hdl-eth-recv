@@ -64,8 +64,6 @@ module recv_top #(
       IDLE: begin
         if (start) begin
           next_state = PREAMBLE;
-        end else begin
-          next_state = state;
         end
       end
       PREAMBLE: begin
@@ -73,8 +71,6 @@ module recv_top #(
           next_state = ERROR;
         end else if (state_counter >= PreambleLength - 16'h1) begin
           next_state = SFD;
-        end else begin
-          next_state = state;
         end
       end
       SFD: begin
@@ -82,8 +78,6 @@ module recv_top #(
           next_state = ERROR;
         end else if (state_counter >= SFDLength - 16'h1) begin
           next_state = MACDST;
-        end else begin
-          next_state = state;
         end
       end
       MACDST: begin
@@ -91,29 +85,21 @@ module recv_top #(
           next_state = IDLE;
         end else if (state_counter >= MACLength - 16'h1) begin
           next_state = MACSRC;
-        end else begin
-          next_state = state;
         end
       end
       MACSRC: begin
         if (state_counter >= MACLength - 16'h1) begin
           next_state = PLLEN;
-        end else begin
-          next_state = state;
         end
       end
       PLLEN: begin
         if (state_counter >= PLLenLength - 16'h1) begin
           next_state = PL;
-        end else begin
-          next_state = state;
         end
       end
       PL: begin
         if (state_counter >= payload_length - 16'h1) begin
           next_state = FCS;
-        end else begin
-          next_state = state;
         end
       end
       FCS: begin
@@ -121,8 +107,6 @@ module recv_top #(
           next_state = ERROR;
         end else if (state_counter >= FCSLength - 16'h1) begin
           next_state = SUCCESS;
-        end else begin
-          next_state = state;
         end
       end
       SUCCESS: next_state = IDLE;
