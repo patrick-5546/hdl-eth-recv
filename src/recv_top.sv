@@ -39,7 +39,7 @@ module recv_top #(
   logic [15:0] payload_length, state_counter;
   logic [7:0] data_q, data_q1, data_q2, data_q3, data_q4, data_q5, data_q6;
   logic [7:0] lrc;
-  logic [3:0] state, next_state;
+  logic [3:0] state, next_state, last_state;
 
   always_ff @(posedge clk) begin : stateCounter
     if (rst || state != next_state) begin
@@ -51,8 +51,10 @@ module recv_top #(
 
   always_ff @(posedge clk) begin : stateRegister
     if (rst) begin
+      last_state <= IDLE;
       state <= IDLE;
     end else begin
+      last_state <= state;
       state <= next_state;
     end
   end
@@ -152,7 +154,7 @@ module recv_top #(
         rdy = 1'b0;
       end
       ERROR: begin
-        out = {4'hF, state};
+        out = {4'hF, last_state};
         vld = 1'b1;
         rdy = 1'b0;
       end

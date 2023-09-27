@@ -120,8 +120,9 @@ async def monitor(dut):
     mac_src, payload, err = out_int[:6], out_int[6:-1], out_int[-1]
     mac_src = ":".join([hex(b)[2:].zfill(2) for b in mac_src])
     payload = "".join([chr(b) for b in payload])
-    if err:
-        dut._log.info("Monitor: incorrect fcs")
+    if err != 0:
+        err_state = err & 0xF
+        dut._log.error(f"Monitor: there was an error in state {err_state}")
     else:
         dut._log.info(f"Monitor: payload received from {mac_src}: {payload}")
         assert mac_src == MACSRC, "source MAC address incorrect"
