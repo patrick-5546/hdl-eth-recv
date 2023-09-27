@@ -12,8 +12,9 @@ async def test_recv_pass(dut):
     """Test that receiver can successfully receive good data."""
     await init(dut)
     cocotb.start_soon(driver(dut, MACDST, PAYLOAD))
-    cocotb.start_soon(monitor(dut))
+    m = cocotb.start_soon(monitor(dut))
     await ClockCycles(dut.clk, 45)
+    assert m.result() == 0, "there was an error"
 
 
 @cocotb.test()
@@ -21,8 +22,9 @@ async def test_recv_wrong_preamble(dut):
     """Test that receiver can detect that the Preamble section is wrong."""
     await init(dut)
     cocotb.start_soon(driver(dut, MACDST, PAYLOAD, wrong_preamble=True))
-    cocotb.start_soon(monitor(dut))
+    m = cocotb.start_soon(monitor(dut))
     await ClockCycles(dut.clk, 15)
+    assert m.result() == 1, "did not error out in state 1"
 
 
 @cocotb.test()
@@ -30,8 +32,9 @@ async def test_recv_wrong_sfd(dut):
     """Test that receiver can detect that the SFD section is wrong."""
     await init(dut)
     cocotb.start_soon(driver(dut, MACDST, PAYLOAD, wrong_sfd=True))
-    cocotb.start_soon(monitor(dut))
+    m = cocotb.start_soon(monitor(dut))
     await ClockCycles(dut.clk, 15)
+    assert m.result() == 2, "did not error out in state 2"
 
 
 @cocotb.test()
@@ -39,8 +42,9 @@ async def test_recv_wrong_fcs(dut):
     """Test that receiver can detect that the FCS section is wrong."""
     await init(dut)
     cocotb.start_soon(driver(dut, MACDST, PAYLOAD, wrong_fcs=True))
-    cocotb.start_soon(monitor(dut))
+    m = cocotb.start_soon(monitor(dut))
     await ClockCycles(dut.clk, 45)
+    assert m.result() == 7, "did not error out in state 7"
 
 
 @cocotb.test()
@@ -48,8 +52,9 @@ async def test_recv_wrong_macdst(dut):
     """Test that receiver can ignore data that is not intended for it."""
     await init(dut)
     cocotb.start_soon(driver(dut, MACSRC, PAYLOAD))
-    cocotb.start_soon(monitor(dut))
+    m = cocotb.start_soon(monitor(dut))
     await ClockCycles(dut.clk, 15)
+    assert not m.done(), "monitor completed"
 
 
 async def init(dut):
@@ -153,6 +158,7 @@ async def monitor(dut):
         assert mac_src == MACSRC, "source MAC address incorrect"
         assert payload == PAYLOAD, "payload incorrect"
     dut._log.info("Monitor: output end")
+    return err_state if ret != 0 else 0
 
 
 def parse_mac_address(mac_str):
