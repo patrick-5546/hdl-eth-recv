@@ -17,8 +17,26 @@ async def test_recv_pass(dut):
 
 
 @cocotb.test()
-async def test_recv_fail(dut):
-    """Test that receiver can detect bad data."""
+async def test_recv_wrong_preamble(dut):
+    """Test that receiver can detect that the Preamble section is wrong."""
+    await init(dut)
+    cocotb.start_soon(driver(dut, MACDST, PAYLOAD, wrong_preamble=True))
+    cocotb.start_soon(monitor(dut))
+    await ClockCycles(dut.clk, 15)
+
+
+@cocotb.test()
+async def test_recv_wrong_sfd(dut):
+    """Test that receiver can detect that the SFD section is wrong."""
+    await init(dut)
+    cocotb.start_soon(driver(dut, MACDST, PAYLOAD, wrong_sfd=True))
+    cocotb.start_soon(monitor(dut))
+    await ClockCycles(dut.clk, 15)
+
+
+@cocotb.test()
+async def test_recv_wrong_fcs(dut):
+    """Test that receiver can detect that the FCS section is wrong."""
     await init(dut)
     cocotb.start_soon(driver(dut, MACDST, PAYLOAD, wrong_fcs=True))
     cocotb.start_soon(monitor(dut))
@@ -26,7 +44,7 @@ async def test_recv_fail(dut):
 
 
 @cocotb.test()
-async def test_recv_wrong(dut):
+async def test_recv_wrong_macdst(dut):
     """Test that receiver can ignore data that is not intended for it."""
     await init(dut)
     cocotb.start_soon(driver(dut, MACSRC, PAYLOAD))
@@ -54,19 +72,26 @@ async def init(dut):
     await RisingEdge(dut.clk)
 
 
-async def driver(dut, mac_dest, payload, wrong_fcs=False):
+async def driver(
+    dut, mac_dest, payload, wrong_preamble=False, wrong_sfd=False, wrong_fcs=False
+):
     dut._log.info("Driver: preamble start")
     preamble_byte = "1010_1010"
     dut.data.value = int(preamble_byte, 2)
     dut.start.value = 1
     await RisingEdge(dut.clk)
     dut.start.value = 0
-    for _ in range(6):
+    for i in range(6):
+        if wrong_preamble and i == 4:
+            dut.data.value = 0
         await RisingEdge(dut.clk)
 
     dut._log.info("Driver: sfd start")
     sfd_byte = "1010_1011"
-    dut.data.value = int(sfd_byte, 2)
+    if wrong_sfd:
+        dut.data.value = 0
+    else:
+        dut.data.value = int(sfd_byte, 2)
     await RisingEdge(dut.clk)
 
     dut._log.info("Driver: macdst start")
