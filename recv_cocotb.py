@@ -1,9 +1,3 @@
-"""Cocotb testbench for recv_top
-
-Notes
-- Write after RisingEdge, read/assert after FallingEdge
-"""
-
 import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles, FallingEdge, RisingEdge
