@@ -48,7 +48,7 @@ async def init(dut):
 
     await FallingEdge(dut.clk)
     assert dut.out.value == 0, "out should be 0 after reset"
-    assert dut.ready.value == 1, "ready should be 1 after reset"
+    assert dut.rdy.value == 1, "rdy should be 1 after reset"
     assert dut.vld.value == 0, "vld should be 0 after reset"
 
     await RisingEdge(dut.clk)

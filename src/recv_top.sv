@@ -3,7 +3,7 @@ module recv_top #(
 ) (
     output logic [7:0] out,
     output logic vld,
-    output logic ready,
+    output logic rdy,
 
     input logic [7:0] data,
     input logic start,
@@ -132,34 +132,34 @@ module recv_top #(
   always_comb begin : outputLogic
     case (state)
       IDLE: begin
-        out   = 8'h0;
-        vld   = 1'b0;
-        ready = 1'b1;
+        out = 8'h0;
+        vld = 1'b0;
+        rdy = 1'b1;
       end
       PREAMBLE, SFD, MACDST, MACSRC: begin
-        out   = 8'h0;
-        vld   = 1'b0;
-        ready = 1'b0;
+        out = 8'h0;
+        vld = 1'b0;
+        rdy = 1'b0;
       end
       PLLEN, PL, FCS: begin
-        out   = (state == FCS || (state == PL && state_counter >= 4)) ? data_q4 : data_q6;
-        vld   = 1'b1;
-        ready = 1'b0;
+        out = (state == FCS || (state == PL && state_counter >= 4)) ? data_q4 : data_q6;
+        vld = 1'b1;
+        rdy = 1'b0;
       end
       SUCCESS: begin
-        out   = 8'h0;
-        vld   = 1'b1;
-        ready = 1'b0;
+        out = 8'h0;
+        vld = 1'b1;
+        rdy = 1'b0;
       end
       ERROR: begin
-        out   = {4'hF, state};
-        vld   = 1'b1;
-        ready = 1'b0;
+        out = {4'hF, state};
+        vld = 1'b1;
+        rdy = 1'b0;
       end
       default: begin
-        out   = 8'h0;
-        vld   = 1'b0;
-        ready = 1'b0;
+        out = 8'h0;
+        vld = 1'b0;
+        rdy = 1'b0;
       end
     endcase
   end
