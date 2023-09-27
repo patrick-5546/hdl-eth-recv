@@ -86,8 +86,8 @@ async def driver(
     dut.start.value = 1
     await RisingEdge(dut.clk)
     dut.start.value = 0
-    for i in range(6):
-        if wrong_preamble and i == 4:
+    for _ in range(6):
+        if wrong_preamble:
             dut.data.value = 0
         await RisingEdge(dut.clk)
 
@@ -128,11 +128,11 @@ async def driver(
     fcs_bytes = compute_fcs_bytes(
         macdst_bytes, macsrc_bytes, pllen_bytes, payload_bytes
     )
-    for i in range(4):
-        if wrong_fcs and i == 2:
+    for b in fcs_bytes:
+        if wrong_fcs:
             dut.data.value = 0
         else:
-            dut.data.value = fcs_bytes
+            dut.data.value = b
         await RisingEdge(dut.clk)
 
 
@@ -190,7 +190,8 @@ def parse_payload(payload_str):
 
 def compute_fcs_bytes(macdst_bytes, macsrc_bytes, pllen_bytes, payload_bytes):
     buffer = macdst_bytes + macsrc_bytes + pllen_bytes + payload_bytes
-    return compute_lrc(buffer)
+    lrc = compute_lrc(buffer)
+    return [lrc] * 4
 
 
 def compute_lrc(buffer):
