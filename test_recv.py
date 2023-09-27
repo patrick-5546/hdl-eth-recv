@@ -17,6 +17,11 @@ class ModelsimCustom(Modelsim):
             # https://docs.cocotb.org/en/stable/building.html#envvar-COCOTB_ANSI_OUTPUT
             os.environ["COCOTB_ANSI_OUTPUT"] = "1"
 
+        # set log level to debug
+        debug = kwargs["debug"] if "debug" in kwargs else False
+        if debug:
+            os.environ["COCOTB_LOG_LEVEL"] = "DEBUG"
+
         # gui and cli files conflict with each other, so put in separate directories
         sim_build = kwargs["sim_build"] if "sim_build" in kwargs else "sim_build"
         sim_build = os.path.join(sim_build, "gui" if gui else "cli")
@@ -43,6 +48,7 @@ def test_recv(args):
         module="recv_cocotb",
         waves=True,
         gui=args.gui,
+        debug=args.debug,
     ).run()
 
 
@@ -50,6 +56,9 @@ if __name__ == "__main__":
     # argparse configuration
     parser = argparse.ArgumentParser()
     parser.add_argument("--gui", "-g", action="store_true", help="run in gui")
+    parser.add_argument(
+        "--debug", "-d", action="store_true", help="set log level to debug"
+    )
     args = parser.parse_args()
 
     test_recv(args)
