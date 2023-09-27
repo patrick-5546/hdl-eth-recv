@@ -31,7 +31,7 @@ async def test_recv_fail(dut):
     await ClockCycles(dut.clk, 45)
 
 
-# @cocotb.test()
+@cocotb.test()
 async def test_recv_wrong(dut):
     """Test that receiver can ignore data that is not intended for it."""
     await init(dut)
@@ -122,13 +122,16 @@ async def monitor(dut):
         # dut._log.info(f"{hex(int(str(dut.out.value), 2))[2:]}")
         out_int.append(int(dut.out.value))
         await RisingEdge(dut.clk)
-    mac_dest, payload, err = out_int[:6], out_int[6:-1], out_int[-1]
-    mac_dest = ":".join([hex(b)[2:] for b in mac_dest[::-1]])
+
+    mac_src, payload, err = out_int[:6], out_int[6:-1], out_int[-1]
+    mac_src = ":".join([hex(b)[2:].zfill(2) for b in mac_src[::-1]])
     payload = "".join([chr(b) for b in payload[::-1]])
     if err:
-        dut._log.info(f"Monitor: error receiving {mac_dest=}, {payload=}")
+        dut._log.info("Monitor: incorrect fcs")
     else:
-        dut._log.info(f"Monitor: success receiving {mac_dest=}, {payload=}")
+        dut._log.info(f"Monitor: payload received from {mac_src}: {payload}")
+        assert mac_src == MACSRC, "source MAC address incorrect"
+        assert payload == PAYLOAD, "payload incorrect"
     dut._log.info("Monitor: output end")
 
 
