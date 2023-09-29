@@ -127,8 +127,18 @@ module recv_top #(
         vld = 1'b0;
         rdy = 1'b0;
       end
-      PLLEN, PL, FCS: begin
-        out = (state == FCS || (state == PL && state_counter >= 4)) ? data_q4 : data_q6;
+      PLLEN: begin
+        out = data_q6;
+        vld = 1'b1;
+        rdy = 1'b0;
+      end
+      PL: begin
+        out = (state_counter >= 4) ? data_q4 : data_q6;
+        vld = 1'b1;
+        rdy = 1'b0;
+      end
+      FCS: begin
+        out = data_q4;
         vld = 1'b1;
         rdy = 1'b0;
       end
