@@ -1,6 +1,6 @@
 import cocotb
 from cocotb.clock import Clock
-from cocotb.triggers import ClockCycles, FallingEdge, RisingEdge
+from cocotb.triggers import ClockCycles, RisingEdge
 
 MACDST = "00:0a:95:9d:68:16"
 MACSRC = "00:14:22:01:23:45"
@@ -68,18 +68,14 @@ async def init(dut):
     dut.start.value = 0
     await RisingEdge(dut.clk)
     dut.rst.value = 0
-
-    await FallingEdge(dut.clk)
-    assert dut.out.value == 0, "out should be 0 after reset"
-    assert dut.rdy.value == 1, "rdy should be 1 after reset"
-    assert dut.vld.value == 0, "vld should be 0 after reset"
-
     await RisingEdge(dut.clk)
 
 
 async def driver(
     dut, mac_dest, payload, wrong_preamble=False, wrong_sfd=False, wrong_fcs=False
 ):
+    assert dut.rdy.value == 1, "rdy should be 1 after reset"
+
     dut._log.info("Driver: preamble start")
     preamble_byte = "1010_1010"
     dut.data.value = int(preamble_byte, 2)
@@ -137,6 +133,9 @@ async def driver(
 
 
 async def monitor(dut):
+    assert dut.out.value == 0, "out should be 0 after reset"
+    assert dut.vld.value == 0, "vld should be 0 after reset"
+
     while dut.vld.value == 0:
         await RisingEdge(dut.clk)
 
