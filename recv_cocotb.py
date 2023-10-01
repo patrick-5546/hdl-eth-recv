@@ -82,8 +82,8 @@ async def driver(
     dut.start.value = 1
     await RisingEdge(dut.clk)
     dut.start.value = 0
-    for _ in range(6):
-        if wrong_preamble:
+    for i in range(6):
+        if i == 2 and wrong_preamble:
             dut.data.value = 0
         await RisingEdge(dut.clk)
 
@@ -124,8 +124,8 @@ async def driver(
     fcs_bytes = compute_fcs_bytes(
         macdst_bytes, macsrc_bytes, pllen_bytes, payload_bytes
     )
-    for b in fcs_bytes:
-        if wrong_fcs:
+    for i, b in enumerate(fcs_bytes):
+        if i == 2 and wrong_fcs:
             dut.data.value = 0
         else:
             dut.data.value = b
