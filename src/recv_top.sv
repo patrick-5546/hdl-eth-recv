@@ -64,6 +64,8 @@ module recv_top #(
       IDLE: begin
         if (start) begin
           next_state = PREAMBLE;
+        end else begin
+          next_state = state;
         end
       end
       PREAMBLE: begin
