@@ -12,822 +12,811 @@ module recv_top(out, vld, rdy, data, start, clk, rst);
   wire start, clk, rst;
   wire [7:0] out;
   wire vld, rdy;
-  wire [3:0] next_state;
   wire [15:0] state_counter;
-  wire [7:0] lrc;
+  wire [3:0] state;
   wire [15:0] payload_length;
+  wire [7:0] lrc;
   wire [7:0] data_q;
   wire [7:0] data_q6;
   wire [7:0] data_q4;
   wire [3:0] last_state;
   wire [7:0] data_q5;
-  wire [3:0] state;
   wire [7:0] data_q3;
   wire [7:0] data_q2;
   wire [7:0] data_q1;
   wire n_0, n_1, n_2, n_3, n_4, n_5, n_6, n_7;
   wire n_8, n_9, n_10, n_11, n_12, n_13, n_14, n_15;
   wire n_16, n_17, n_18, n_19, n_20, n_21, n_22, n_23;
-  wire n_24, n_25, n_26, n_27, n_28, n_29, n_30, n_31;
-  wire n_32, n_33, n_34, n_35, n_36, n_37, n_38, n_39;
-  wire n_40, n_41, n_42, n_43, n_44, n_45, n_46, n_47;
-  wire n_48, n_49, n_50, n_51, n_52, n_53, n_54, n_55;
-  wire n_56, n_57, n_58, n_59, n_60, n_61, n_63, n_64;
-  wire n_65, n_66, n_67, n_68, n_69, n_70, n_71, n_72;
-  wire n_73, n_74, n_75, n_76, n_77, n_78, n_79, n_81;
-  wire n_82, n_83, n_84, n_85, n_86, n_87, n_88, n_89;
-  wire n_90, n_91, n_92, n_93, n_94, n_95, n_96, n_97;
-  wire n_98, n_99, n_100, n_101, n_102, n_103, n_104, n_105;
-  wire n_106, n_107, n_108, n_109, n_110, n_112, n_113, n_114;
-  wire n_115, n_116, n_117, n_118, n_119, n_120, n_121, n_122;
-  wire n_123, n_124, n_125, n_126, n_127, n_128, n_129, n_130;
-  wire n_131, n_132, n_133, n_134, n_135, n_136, n_137, n_138;
-  wire n_139, n_140, n_141, n_142, n_143, n_144, n_145, n_146;
-  wire n_147, n_148, n_149, n_150, n_151, n_152, n_154, n_155;
-  wire n_156, n_157, n_158, n_159, n_160, n_161, n_162, n_163;
-  wire n_164, n_165, n_166, n_167, n_168, n_169, n_170, n_171;
-  wire n_172, n_173, n_174, n_175, n_176, n_177, n_178, n_180;
-  wire n_181, n_182, n_183, n_184, n_185, n_186, n_187, n_188;
-  wire n_189, n_190, n_191, n_192, n_193, n_194, n_195, n_196;
-  wire n_197, n_198, n_199, n_200, n_201, n_202, n_203, n_204;
-  wire n_205, n_206, n_207, n_208, n_209, n_210, n_211, n_212;
-  wire n_213, n_214, n_215, n_216, n_217, n_218, n_219, n_221;
-  wire n_222, n_223, n_224, n_225, n_226, n_227, n_228, n_229;
-  wire n_230, n_231, n_232, n_233, n_234, n_235, n_236, n_237;
-  wire n_238, n_239, n_240, n_241, n_242, n_243, n_244, n_245;
-  wire n_247, n_248, n_249, n_250, n_251, n_252, n_253, n_254;
-  wire n_255, n_256, n_257, n_258, n_259, n_260, n_261, n_262;
-  wire n_263, n_264, n_265, n_266, n_267, n_268, n_269, n_271;
-  wire n_272, n_273, n_274, n_275, n_276, n_277, n_278, n_279;
-  wire n_280, n_282, n_283, n_284, n_285, n_286, n_287, n_288;
-  wire n_289, n_290, n_291, n_292, n_293, n_294, n_295, n_296;
-  wire n_297, n_298, n_299, n_300, n_301, n_302, n_303, n_304;
-  wire n_305, n_306, n_307, n_308, n_309, n_310, n_311, n_312;
-  wire n_313, n_314, n_315, n_316, n_317, n_318, n_319, n_320;
-  wire n_321, n_322, n_323, n_324, n_325, n_326, n_327, n_328;
-  wire n_329, n_330, n_331, n_332, n_333, n_334, n_335, n_336;
-  wire n_337, n_338, n_339, n_341, n_342, n_343, n_344, n_345;
-  wire n_346, n_348, n_349, n_350, n_351, n_352, n_353, n_354;
-  wire n_355, n_356, n_357, n_358, n_359, n_360, n_361, n_362;
-  wire n_363, n_364, n_365, n_366, n_367, n_369, n_370, n_371;
-  wire n_372, n_373, n_374, n_375, n_376, n_377, n_378, n_379;
-  wire n_380, n_381, n_382, n_383, n_384, n_385, n_386, n_387;
-  wire n_388, n_389, n_390, n_391, n_392, n_393, n_394, n_395;
-  wire n_396, n_399, n_404, n_407, n_408, n_409, n_410, n_411;
-  wire n_412, n_413, n_414, n_415, n_416, n_417, n_418, n_419;
-  wire n_420, n_421, n_422, n_423, n_424, n_425, n_426, n_428;
-  wire n_429, n_430, n_431, n_432, n_433, n_434, n_435, n_436;
-  wire n_437, n_438, n_439, n_440, n_441, n_442, n_454, n_455;
-  wire n_456, n_457, n_458;
-  LHQ_X1 \next_state_reg[2] (.E (n_442), .D (n_329), .Q
-       (next_state[2]));
-  LHQ_X1 \next_state_reg[1] (.E (n_442), .D (n_266), .Q
-       (next_state[1]));
-  LHQ_X1 \next_state_reg[3] (.E (n_442), .D (n_249), .Q
-       (next_state[3]));
-  LHQ_X1 \next_state_reg[0] (.E (n_442), .D (n_366), .Q
-       (next_state[0]));
-  NAND4_X1 g9343(.A1 (n_441), .A2 (n_364), .A3 (n_42), .A4 (n_37), .ZN
-       (n_442));
-  NOR3_X1 g9344(.A1 (n_440), .A2 (n_185), .A3 (n_268), .ZN (n_441));
-  NAND4_X1 g9345(.A1 (n_439), .A2 (n_365), .A3 (n_241), .A4 (n_175),
-       .ZN (n_440));
-  NAND2_X1 g9346(.A1 (n_438), .A2 (n_98), .ZN (n_439));
-  NAND4_X1 g9347(.A1 (n_436), .A2 (n_437), .A3 (n_432), .A4 (n_426),
-       .ZN (n_438));
-  AOI22_X1 g9349(.A1 (n_435), .A2 (n_433), .B1 (n_417), .B2
-       (state_counter[15]), .ZN (n_437));
-  NAND3_X1 g9348(.A1 (n_435), .A2 (n_428), .A3 (state_counter[12]), .ZN
-       (n_436));
-  INV_X1 g9351(.I (n_434), .ZN (n_435));
-  OAI21_X1 g9352(.A1 (n_430), .A2 (state_counter[13]), .B (n_431), .ZN
-       (n_434));
-  INV_X1 g9370(.I (n_429), .ZN (n_433));
-  NAND3_X1 g9350(.A1 (n_431), .A2 (n_430), .A3 (state_counter[13]), .ZN
-       (n_432));
-  DFFSNQ_X1 \lrc_reg[7] (.SN (1'b1), .CLK (clk), .D (n_422), .Q
-       (lrc[7]));
-  OAI22_X1 g9371(.A1 (n_421), .A2 (n_409), .B1 (n_428), .B2
-       (state_counter[12]), .ZN (n_429));
-  INV_X1 g9355(.I (n_425), .ZN (n_431));
-  DFFSNQ_X1 \lrc_reg[6] (.SN (1'b1), .CLK (clk), .D (n_420), .Q
-       (lrc[6]));
-  NAND3_X1 g9353(.A1 (n_423), .A2 (n_424), .A3 (state_counter[14]), .ZN
-       (n_426));
-  OAI21_X1 g9356(.A1 (n_424), .A2 (state_counter[14]), .B (n_423), .ZN
-       (n_425));
-  OAI22_X1 g9394(.A1 (n_416), .A2 (n_419), .B1 (n_95), .B2 (n_418), .ZN
-       (n_422));
-  NOR2_X1 g9377(.A1 (n_396), .A2 (n_415), .ZN (n_421));
-  OAI22_X1 g9404(.A1 (n_413), .A2 (n_419), .B1 (n_158), .B2 (n_418),
-       .ZN (n_420));
-  OR2_X1 g9357(.A1 (n_417), .A2 (state_counter[15]), .Z (n_423));
-  XOR2_X1 g9405(.A1 (n_411), .A2 (n_97), .Z (n_416));
-  OAI21_X1 g9392(.A1 (n_367), .A2 (state_counter[10]), .B (n_414), .ZN
-       (n_415));
-  XNOR2_X1 g9361(.A1 (n_410), .A2 (payload_length[15]), .ZN (n_417));
-  OAI21_X1 g9402(.A1 (n_408), .A2 (n_296), .B (n_360), .ZN (n_414));
-  INV_X1 g9416(.I (n_412), .ZN (n_413));
-  DFFSNQ_X1 \lrc_reg[5] (.SN (1'b1), .CLK (clk), .D (n_407), .Q
-       (lrc[5]));
-  FA_X1 g9417(.A (lrc[6]), .B (data_q[6]), .CI (n_374), .CO (n_411), .S
-       (n_412));
-  HA_X1 g9363(.A (n_273), .B (n_399), .CO (n_410), .S (n_424));
-  AOI21_X1 g9379(.A1 (n_370), .A2 (n_275), .B (n_395), .ZN (n_409));
-  OAI22_X1 g9418(.A1 (n_382), .A2 (n_243), .B1 (n_381), .B2
-       (state_counter[7]), .ZN (n_408));
-  OAI22_X1 g9419(.A1 (n_380), .A2 (n_419), .B1 (n_3), .B2 (n_418), .ZN
-       (n_407));
-  DFFSNQ_X1 \state_counter_reg[15] (.SN (1'b1), .CLK (clk), .D (n_391),
-       .Q (state_counter[15]));
-  NAND2_X1 g9461(.A1 (n_390), .A2 (n_404), .ZN (out[7]));
-  NAND2_X1 g9462(.A1 (n_386), .A2 (n_404), .ZN (out[6]));
-  NAND2_X1 g9463(.A1 (n_383), .A2 (n_404), .ZN (out[5]));
-  NAND2_X1 g9464(.A1 (n_392), .A2 (n_404), .ZN (out[4]));
-  NAND2_X1 g9467(.A1 (n_387), .A2 (n_294), .ZN (out[2]));
-  NAND2_X1 g9469(.A1 (n_385), .A2 (n_293), .ZN (out[0]));
-  AOI21_X1 g9372(.A1 (n_393), .A2 (payload_length[13]), .B (n_399), .ZN
-       (n_430));
-  DFFSNQ_X1 \state_counter_reg[14] (.SN (1'b1), .CLK (clk), .D (n_377),
-       .Q (state_counter[14]));
-  NAND2_X1 g9466(.A1 (n_326), .A2 (n_379), .ZN (out[3]));
-  NAND2_X1 g9468(.A1 (n_327), .A2 (n_378), .ZN (out[1]));
-  OAI22_X1 g9380(.A1 (n_394), .A2 (state_counter[11]), .B1 (n_359), .B2
-       (state_counter[9]), .ZN (n_396));
-  AOI21_X1 g9386(.A1 (n_371), .A2 (state_counter[11]), .B (n_394), .ZN
-       (n_395));
-  NOR2_X1 g9374(.A1 (n_393), .A2 (payload_length[13]), .ZN (n_399));
-  AOI22_X1 g9509(.A1 (n_389), .A2 (data_q6[4]), .B1 (n_388), .B2
-       (data_q4[4]), .ZN (n_392));
-  NOR2_X1 g9358(.A1 (n_372), .A2 (n_376), .ZN (n_391));
-  AOI22_X1 g9511(.A1 (n_389), .A2 (data_q6[7]), .B1 (n_388), .B2
-       (data_q4[7]), .ZN (n_390));
-  AOI22_X1 g9512(.A1 (n_389), .A2 (data_q6[2]), .B1 (n_384), .B2
-       (last_state[2]), .ZN (n_387));
-  AOI22_X1 g9513(.A1 (n_389), .A2 (data_q6[6]), .B1 (n_388), .B2
-       (data_q4[6]), .ZN (n_386));
-  AOI22_X1 g9514(.A1 (n_389), .A2 (data_q6[0]), .B1 (n_384), .B2
-       (last_state[0]), .ZN (n_385));
-  AOI22_X1 g9515(.A1 (n_389), .A2 (data_q6[5]), .B1 (n_388), .B2
-       (data_q4[5]), .ZN (n_383));
-  AND2_X1 g9429(.A1 (n_381), .A2 (state_counter[7]), .Z (n_382));
-  INV_X1 g9433(.I (n_375), .ZN (n_380));
-  DFFSNQ_X1 \lrc_reg[4] (.SN (1'b1), .CLK (clk), .D (n_369), .Q
-       (lrc[4]));
-  XNOR2_X1 g9381(.A1 (n_373), .A2 (payload_length[12]), .ZN (n_428));
-  NAND2_X1 g9519(.A1 (n_389), .A2 (data_q6[3]), .ZN (n_379));
-  NAND2_X1 g9521(.A1 (n_389), .A2 (data_q6[1]), .ZN (n_378));
-  NOR2_X1 g9362(.A1 (n_454), .A2 (n_376), .ZN (n_377));
-  FA_X1 g9434(.A (lrc[5]), .B (data_q[5]), .CI (n_338), .CO (n_374), .S
-       (n_375));
-  DFFSNQ_X1 \state_counter_reg[13] (.SN (1'b1), .CLK (clk), .D (n_363),
-       .Q (state_counter[13]));
-  NAND2_X1 g9383(.A1 (n_373), .A2 (n_277), .ZN (n_393));
-  XOR2_X1 g9360(.A1 (n_348), .A2 (state_counter[15]), .Z (n_372));
-  AOI22_X1 g9435(.A1 (n_361), .A2 (n_238), .B1 (n_237), .B2 (n_236),
-       .ZN (n_381));
-  AOI21_X1 g9391(.A1 (n_362), .A2 (payload_length[11]), .B (n_373), .ZN
-       (n_394));
-  INV_X1 g9397(.I (n_370), .ZN (n_371));
-  DFFSNQ_X1 \state_counter_reg[12] (.SN (1'b1), .CLK (clk), .D (n_358),
-       .Q (state_counter[12]));
-  OAI22_X1 g9436(.A1 (n_343), .A2 (n_419), .B1 (n_89), .B2 (n_418), .ZN
-       (n_369));
-  DFFSNQ_X1 \data_q6_reg[4] (.SN (1'b1), .CLK (clk), .D (n_352), .Q
-       (data_q6[4]));
-  DFFSNQ_X1 \data_q6_reg[2] (.SN (1'b1), .CLK (clk), .D (n_354), .Q
-       (data_q6[2]));
-  DFFSNQ_X1 \data_q6_reg[3] (.SN (1'b1), .CLK (clk), .D (n_353), .Q
-       (data_q6[3]));
-  DFFSNQ_X1 \data_q6_reg[7] (.SN (1'b1), .CLK (clk), .D (n_349), .Q
-       (data_q6[7]));
-  DFFSNQ_X1 \data_q6_reg[1] (.SN (1'b1), .CLK (clk), .D (n_356), .Q
-       (data_q6[1]));
-  DFFSNQ_X1 \data_q6_reg[0] (.SN (1'b1), .CLK (clk), .D (n_357), .Q
-       (data_q6[0]));
-  DFFSNQ_X1 \data_q6_reg[6] (.SN (1'b1), .CLK (clk), .D (n_350), .Q
-       (data_q6[6]));
-  DFFSNQ_X1 \data_q6_reg[5] (.SN (1'b1), .CLK (clk), .D (n_351), .Q
-       (data_q6[5]));
-  NAND2_X1 g9398(.A1 (n_367), .A2 (state_counter[10]), .ZN (n_370));
-  NAND4_X1 g9387(.A1 (n_365), .A2 (n_364), .A3 (n_328), .A4 (n_81), .ZN
-       (n_366));
-  NOR2_X1 g9366(.A1 (n_345), .A2 (n_376), .ZN (n_363));
-  NOR2_X1 g9396(.A1 (n_362), .A2 (payload_length[11]), .ZN (n_373));
-  AOI22_X1 g9471(.A1 (n_324), .A2 (n_156), .B1 (n_323), .B2
-       (state_counter[5]), .ZN (n_361));
-  AOI21_X1 g9407(.A1 (n_342), .A2 (payload_length[10]), .B (n_344), .ZN
-       (n_367));
-  AOI22_X1 g9408(.A1 (n_359), .A2 (state_counter[9]), .B1 (n_295), .B2
-       (state_counter[8]), .ZN (n_360));
-  NOR2_X1 g9375(.A1 (n_455), .A2 (n_376), .ZN (n_358));
-  AND2_X1 g9568(.A1 (data_q5[0]), .A2 (n_355), .Z (n_357));
-  AND2_X1 g9569(.A1 (data_q5[1]), .A2 (n_355), .Z (n_356));
-  AND2_X1 g9570(.A1 (data_q5[2]), .A2 (n_355), .Z (n_354));
-  AND2_X1 g9571(.A1 (data_q5[3]), .A2 (n_355), .Z (n_353));
-  AND2_X1 g9572(.A1 (data_q5[4]), .A2 (n_355), .Z (n_352));
-  AND2_X1 g9573(.A1 (data_q5[5]), .A2 (n_355), .Z (n_351));
-  AND2_X1 g9574(.A1 (data_q5[6]), .A2 (n_355), .Z (n_350));
-  AND2_X1 g9575(.A1 (data_q5[7]), .A2 (n_355), .Z (n_349));
-  NAND2_X1 g9367(.A1 (n_346), .A2 (state_counter[14]), .ZN (n_348));
-  DFFSNQ_X1 \state_counter_reg[11] (.SN (1'b1), .CLK (clk), .D (n_325),
-       .Q (state_counter[11]));
-  DFFSNQ_X1 \payload_length_reg[0] (.SN (1'b1), .CLK (clk), .D (n_337),
-       .Q (payload_length[0]));
-  DFFSNQ_X1 \payload_length_reg[1] (.SN (1'b1), .CLK (clk), .D (n_336),
-       .Q (payload_length[1]));
-  DFFSNQ_X1 \payload_length_reg[2] (.SN (1'b1), .CLK (clk), .D (n_335),
-       .Q (payload_length[2]));
-  DFFSNQ_X1 \payload_length_reg[4] (.SN (1'b1), .CLK (clk), .D (n_333),
-       .Q (payload_length[4]));
-  DFFSNQ_X1 \payload_length_reg[5] (.SN (1'b1), .CLK (clk), .D (n_332),
-       .Q (payload_length[5]));
-  DFFSNQ_X1 \payload_length_reg[6] (.SN (1'b1), .CLK (clk), .D (n_331),
-       .Q (payload_length[6]));
-  DFFSNQ_X1 \payload_length_reg[3] (.SN (1'b1), .CLK (clk), .D (n_334),
-       .Q (payload_length[3]));
-  XOR2_X1 g9373(.A1 (n_341), .A2 (state_counter[13]), .Z (n_345));
-  INV_X1 g9411(.I (n_344), .ZN (n_362));
-  INV_X1 g9503(.I (n_339), .ZN (n_343));
-  DFFSNQ_X1 \payload_length_reg[7] (.SN (1'b1), .CLK (clk), .D (n_330),
-       .Q (payload_length[7]));
-  DFFSNQ_X1 \state_counter_reg[10] (.SN (1'b1), .CLK (clk), .D (n_292),
-       .Q (state_counter[10]));
-  DFFSNQ_X1 \payload_length_reg[10] (.SN (1'b1), .CLK (clk), .D
-       (n_321), .Q (payload_length[10]));
-  DFFSNQ_X1 \payload_length_reg[11] (.SN (1'b1), .CLK (clk), .D
-       (n_317), .Q (payload_length[11]));
-  DFFSNQ_X1 \payload_length_reg[13] (.SN (1'b1), .CLK (clk), .D
-       (n_311), .Q (payload_length[13]));
-  DFFSNQ_X1 \payload_length_reg[15] (.SN (1'b1), .CLK (clk), .D
-       (n_310), .Q (payload_length[15]));
-  DFFSNQ_X1 \payload_length_reg[8] (.SN (1'b1), .CLK (clk), .D (n_300),
-       .Q (payload_length[8]));
-  DFFSNQ_X1 \payload_length_reg[9] (.SN (1'b1), .CLK (clk), .D (n_299),
-       .Q (payload_length[9]));
-  NOR2_X1 g9412(.A1 (n_342), .A2 (payload_length[10]), .ZN (n_344));
-  NOR2_X1 g9376(.A1 (n_341), .A2 (n_7), .ZN (n_346));
-  NAND2_X1 g9399(.A1 (n_318), .A2 (n_239), .ZN (n_365));
-  DFFSNQ_X1 \data_q5_reg[0] (.SN (1'b1), .CLK (clk), .D (n_320), .Q
-       (data_q5[0]));
-  DFFSNQ_X1 \data_q5_reg[5] (.SN (1'b1), .CLK (clk), .D (n_312), .Q
-       (data_q5[5]));
-  DFFSNQ_X1 \data_q5_reg[1] (.SN (1'b1), .CLK (clk), .D (n_319), .Q
-       (data_q5[1]));
-  DFFSNQ_X1 \data_q5_reg[2] (.SN (1'b1), .CLK (clk), .D (n_316), .Q
-       (data_q5[2]));
-  DFFSNQ_X1 \data_q5_reg[3] (.SN (1'b1), .CLK (clk), .D (n_315), .Q
-       (data_q5[3]));
-  DFFSNQ_X1 \data_q5_reg[4] (.SN (1'b1), .CLK (clk), .D (n_314), .Q
-       (data_q5[4]));
-  DFFSNQ_X1 \data_q5_reg[7] (.SN (1'b1), .CLK (clk), .D (n_313), .Q
-       (data_q5[7]));
-  DFFSNQ_X1 \data_q5_reg[6] (.SN (1'b1), .CLK (clk), .D (n_322), .Q
-       (data_q5[6]));
-  FA_X1 g9504(.A (lrc[4]), .B (data_q[4]), .CI (n_253), .CO (n_338), .S
-       (n_339));
-  INV_X1 g9472(.I (n_298), .ZN (n_337));
-  INV_X1 g9484(.I (n_309), .ZN (n_336));
-  INV_X1 g9486(.I (n_308), .ZN (n_335));
-  INV_X1 g9488(.I (n_305), .ZN (n_334));
-  INV_X1 g9490(.I (n_304), .ZN (n_333));
-  INV_X1 g9492(.I (n_303), .ZN (n_332));
-  INV_X1 g9494(.I (n_302), .ZN (n_331));
-  INV_X1 g9496(.I (n_301), .ZN (n_330));
-  NAND2_X1 g9506(.A1 (n_282), .A2 (n_328), .ZN (n_329));
-  AOI22_X1 g9508(.A1 (n_388), .A2 (data_q4[1]), .B1 (n_384), .B2
-       (last_state[1]), .ZN (n_327));
-  AOI22_X1 g9510(.A1 (n_388), .A2 (data_q4[3]), .B1 (n_384), .B2
-       (last_state[3]), .ZN (n_326));
-  AOI21_X1 g9422(.A1 (n_283), .A2 (payload_length[9]), .B (n_297), .ZN
-       (n_359));
-  NOR2_X1 g9384(.A1 (n_279), .A2 (n_376), .ZN (n_325));
-  OR2_X1 g9523(.A1 (n_323), .A2 (state_counter[5]), .Z (n_324));
-  DFFSNQ_X1 \lrc_reg[3] (.SN (1'b1), .CLK (clk), .D (n_269), .Q
-       (lrc[3]));
-  AND2_X1 g9603(.A1 (data_q4[6]), .A2 (n_355), .Z (n_322));
-  INV_X1 g9474(.I (n_291), .ZN (n_321));
-  AND2_X1 g9605(.A1 (data_q4[0]), .A2 (n_355), .Z (n_320));
-  AND2_X1 g9607(.A1 (data_q4[1]), .A2 (n_355), .Z (n_319));
-  NAND4_X1 g9403(.A1 (n_264), .A2 (n_227), .A3 (n_82), .A4 (n_210), .ZN
-       (n_318));
-  INV_X1 g9476(.I (n_290), .ZN (n_317));
-  AND2_X1 g9608(.A1 (data_q4[2]), .A2 (n_355), .Z (n_316));
-  AND2_X1 g9609(.A1 (data_q4[3]), .A2 (n_355), .Z (n_315));
-  AND2_X1 g9610(.A1 (data_q4[4]), .A2 (n_355), .Z (n_314));
-  AND2_X1 g9611(.A1 (data_q4[7]), .A2 (n_355), .Z (n_313));
-  AND2_X1 g9612(.A1 (data_q4[5]), .A2 (n_355), .Z (n_312));
-  INV_X1 g9479(.I (n_287), .ZN (n_311));
-  DFFSNQ_X1 \payload_length_reg[12] (.SN (1'b1), .CLK (clk), .D
-       (n_278), .Q (payload_length[12]));
-  INV_X1 g9482(.I (n_286), .ZN (n_310));
-  AOI22_X1 g9485(.A1 (payload_length[1]), .A2 (n_307), .B1 (n_306), .B2
-       (data_q[1]), .ZN (n_309));
-  AOI22_X1 g9487(.A1 (payload_length[2]), .A2 (n_307), .B1 (n_306), .B2
-       (data_q[2]), .ZN (n_308));
-  AOI22_X1 g9489(.A1 (payload_length[3]), .A2 (n_307), .B1 (n_306), .B2
-       (data_q[3]), .ZN (n_305));
-  AOI22_X1 g9491(.A1 (payload_length[4]), .A2 (n_307), .B1 (n_306), .B2
-       (data_q[4]), .ZN (n_304));
-  AOI22_X1 g9493(.A1 (payload_length[5]), .A2 (n_307), .B1 (n_306), .B2
-       (data_q[5]), .ZN (n_303));
-  AOI22_X1 g9495(.A1 (payload_length[6]), .A2 (n_307), .B1 (n_306), .B2
-       (data_q[6]), .ZN (n_302));
-  AOI22_X1 g9497(.A1 (payload_length[7]), .A2 (n_307), .B1 (n_306), .B2
-       (data_q[7]), .ZN (n_301));
-  INV_X1 g9498(.I (n_285), .ZN (n_300));
-  INV_X1 g9500(.I (n_284), .ZN (n_299));
-  DFFSNQ_X1 \payload_length_reg[14] (.SN (1'b1), .CLK (clk), .D
-       (n_274), .Q (payload_length[14]));
-  AOI22_X1 g9473(.A1 (payload_length[0]), .A2 (n_307), .B1 (n_306), .B2
-       (data_q[0]), .ZN (n_298));
-  INV_X1 g9425(.I (n_297), .ZN (n_342));
-  NOR2_X1 g9427(.A1 (n_295), .A2 (state_counter[8]), .ZN (n_296));
-  NAND2_X1 g9520(.A1 (n_388), .A2 (data_q4[2]), .ZN (n_294));
-  NAND2_X1 g9522(.A1 (n_388), .A2 (data_q4[0]), .ZN (n_293));
-  NAND2_X1 g9385(.A1 (n_280), .A2 (state_counter[12]), .ZN (n_341));
-  NOR2_X1 g9400(.A1 (n_456), .A2 (n_376), .ZN (n_292));
-  DFFSNQ_X1 \state_counter_reg[9] (.SN (1'b1), .CLK (clk), .D (n_265),
-       .Q (state_counter[9]));
-  AOI22_X1 g9475(.A1 (payload_length[10]), .A2 (n_289), .B1 (n_288),
-       .B2 (data_q[2]), .ZN (n_291));
-  AOI22_X1 g9477(.A1 (payload_length[11]), .A2 (n_289), .B1 (n_288),
-       .B2 (data_q[3]), .ZN (n_290));
-  AOI22_X1 g9480(.A1 (payload_length[13]), .A2 (n_289), .B1 (n_288),
-       .B2 (data_q[5]), .ZN (n_287));
-  AOI22_X1 g9483(.A1 (payload_length[15]), .A2 (n_289), .B1 (n_288),
-       .B2 (data_q[7]), .ZN (n_286));
-  AOI22_X1 g9499(.A1 (payload_length[8]), .A2 (n_289), .B1 (n_288), .B2
-       (data_q[0]), .ZN (n_285));
-  AOI22_X1 g9501(.A1 (payload_length[9]), .A2 (n_289), .B1 (n_288), .B2
-       (data_q[1]), .ZN (n_284));
-  NOR2_X1 g9426(.A1 (n_283), .A2 (payload_length[9]), .ZN (n_297));
-  AOI22_X1 g9531(.A1 (n_267), .A2 (n_216), .B1 (n_250), .B2 (n_65), .ZN
-       (n_282));
-  OAI21_X1 g9546(.A1 (n_248), .A2 (n_155), .B (n_230), .ZN (n_323));
-  XOR2_X1 g9393(.A1 (n_276), .A2 (state_counter[11]), .Z (n_279));
-  DFFSNQ_X1 \state_counter_reg[8] (.SN (1'b1), .CLK (clk), .D (n_254),
-       .Q (state_counter[8]));
-  DFFSNQ_X1 \lrc_reg[2] (.SN (1'b1), .CLK (clk), .D (n_252), .Q
-       (lrc[2]));
-  OAI22_X1 g9478(.A1 (n_277), .A2 (n_272), .B1 (n_271), .B2 (n_140),
-       .ZN (n_278));
-  NOR2_X1 g9401(.A1 (n_276), .A2 (n_275), .ZN (n_280));
-  DFFSNQ_X1 \data_q4_reg[4] (.SN (1'b1), .CLK (clk), .D (n_257), .Q
-       (data_q4[4]));
-  DFFSNQ_X1 \data_q4_reg[2] (.SN (1'b1), .CLK (clk), .D (n_256), .Q
-       (data_q4[2]));
-  DFFSNQ_X1 \data_q4_reg[3] (.SN (1'b1), .CLK (clk), .D (n_255), .Q
-       (data_q4[3]));
-  DFFSNQ_X1 \data_q4_reg[1] (.SN (1'b1), .CLK (clk), .D (n_258), .Q
-       (data_q4[1]));
-  DFFSNQ_X1 \data_q4_reg[7] (.SN (1'b1), .CLK (clk), .D (n_260), .Q
-       (data_q4[7]));
-  DFFSNQ_X1 \data_q4_reg[0] (.SN (1'b1), .CLK (clk), .D (n_259), .Q
-       (data_q4[0]));
-  OAI22_X1 g9481(.A1 (n_273), .A2 (n_272), .B1 (n_271), .B2 (n_70), .ZN
-       (n_274));
-  DFFSNQ_X1 \data_q4_reg[6] (.SN (1'b1), .CLK (clk), .D (n_261), .Q
-       (data_q4[6]));
-  DFFSNQ_X1 \data_q4_reg[5] (.SN (1'b1), .CLK (clk), .D (n_262), .Q
-       (data_q4[5]));
-  OAI22_X1 g9507(.A1 (n_231), .A2 (n_419), .B1 (n_5), .B2 (n_418), .ZN
-       (n_269));
-  NOR2_X1 g9536(.A1 (n_267), .A2 (n_184), .ZN (n_268));
-  NOR3_X1 g9544(.A1 (n_251), .A2 (n_61), .A3 (state[3]), .ZN (n_266));
-  AOI21_X1 g9456(.A1 (n_247), .A2 (payload_length[8]), .B (n_263), .ZN
-       (n_295));
-  NOR2_X1 g9413(.A1 (n_244), .A2 (n_376), .ZN (n_265));
-  NOR4_X1 g9415(.A1 (n_226), .A2 (n_221), .A3 (n_189), .A4 (n_141), .ZN
-       (n_264));
-  OR2_X1 g9528(.A1 (n_235), .A2 (n_242), .Z (n_307));
-  INV_X1 g9459(.I (n_263), .ZN (n_283));
-  AND2_X1 g9632(.A1 (data_q3[5]), .A2 (n_355), .Z (n_262));
-  AND2_X1 g9633(.A1 (data_q3[6]), .A2 (n_355), .Z (n_261));
-  AND2_X1 g9634(.A1 (data_q3[7]), .A2 (n_355), .Z (n_260));
-  AND2_X1 g9636(.A1 (data_q3[0]), .A2 (n_355), .Z (n_259));
-  AND2_X1 g9637(.A1 (data_q3[1]), .A2 (n_355), .Z (n_258));
-  AND2_X1 g9639(.A1 (data_q3[4]), .A2 (n_355), .Z (n_257));
-  AND2_X1 g9640(.A1 (data_q3[2]), .A2 (n_355), .Z (n_256));
-  AND2_X1 g9641(.A1 (data_q3[3]), .A2 (n_355), .Z (n_255));
-  NAND2_X1 g9414(.A1 (n_245), .A2 (state_counter[10]), .ZN (n_276));
-  NOR2_X1 g9428(.A1 (n_457), .A2 (n_376), .ZN (n_254));
-  INV_X1 g9526(.I (n_272), .ZN (n_289));
-  OAI21_X1 g9545(.A1 (n_203), .A2 (n_76), .B (n_116), .ZN (n_253));
-  OAI22_X1 g9547(.A1 (n_204), .A2 (n_419), .B1 (n_46), .B2 (n_418), .ZN
-       (n_252));
-  NOR4_X1 g9566(.A1 (n_213), .A2 (n_215), .A3 (n_126), .A4 (n_121), .ZN
-       (n_267));
-  OAI21_X1 g9578(.A1 (n_219), .A2 (n_250), .B (n_364), .ZN (n_251));
-  NAND3_X1 g9579(.A1 (n_364), .A2 (n_217), .A3 (n_208), .ZN (n_249));
-  OAI22_X1 g9581(.A1 (n_229), .A2 (state_counter[4]), .B1 (n_113), .B2
-       (n_112), .ZN (n_248));
-  NOR2_X1 g9460(.A1 (n_247), .A2 (payload_length[8]), .ZN (n_263));
-  DFFSNQ_X1 \lrc_reg[1] (.SN (1'b1), .CLK (clk), .D (n_212), .Q
-       (lrc[1]));
-  DFFSNQ_X1 \lrc_reg[0] (.SN (1'b1), .CLK (clk), .D (n_211), .Q
-       (lrc[0]));
-  XOR2_X1 g9423(.A1 (n_228), .A2 (state_counter[9]), .Z (n_244));
-  AOI21_X1 g9525(.A1 (n_209), .A2 (payload_length[7]), .B (n_223), .ZN
-       (n_243));
-  AOI21_X1 g9527(.A1 (n_240), .A2 (n_233), .B (n_242), .ZN (n_272));
-  AOI22_X1 g9529(.A1 (n_240), .A2 (n_232), .B1 (n_187), .B2 (n_239),
-       .ZN (n_241));
-  OR2_X1 g9534(.A1 (n_237), .A2 (n_236), .Z (n_238));
-  NOR2_X1 g9537(.A1 (n_234), .A2 (n_222), .ZN (n_235));
-  AND2_X1 g9538(.A1 (n_234), .A2 (n_233), .Z (n_306));
-  INV_X1 g9539(.I (n_288), .ZN (n_271));
-  OR2_X1 g9542(.A1 (n_207), .A2 (n_232), .Z (n_389));
-  XOR2_X1 g9548(.A1 (n_190), .A2 (n_202), .Z (n_231));
-  DFFSNQ_X1 \state_counter_reg[7] (.SN (1'b1), .CLK (clk), .D (n_201),
-       .Q (state_counter[7]));
-  NAND2_X1 g9595(.A1 (n_229), .A2 (state_counter[4]), .ZN (n_230));
-  DFFSNQ_X1 \data_q3_reg[4] (.SN (1'b1), .CLK (clk), .D (n_199), .Q
-       (data_q3[4]));
-  DFFSNQ_X1 \data_q3_reg[1] (.SN (1'b1), .CLK (clk), .D (n_198), .Q
-       (data_q3[1]));
-  DFFSNQ_X1 \data_q3_reg[2] (.SN (1'b1), .CLK (clk), .D (n_194), .Q
-       (data_q3[2]));
-  DFFSNQ_X1 \data_q3_reg[5] (.SN (1'b1), .CLK (clk), .D (n_193), .Q
-       (data_q3[5]));
-  DFFSNQ_X1 \data_q3_reg[0] (.SN (1'b1), .CLK (clk), .D (n_197), .Q
-       (data_q3[0]));
-  DFFSNQ_X1 \data_q3_reg[7] (.SN (1'b1), .CLK (clk), .D (n_196), .Q
-       (data_q3[7]));
-  DFFSNQ_X1 \data_q3_reg[6] (.SN (1'b1), .CLK (clk), .D (n_192), .Q
-       (data_q3[6]));
-  DFFSNQ_X1 \data_q3_reg[3] (.SN (1'b1), .CLK (clk), .D (n_200), .Q
-       (data_q3[3]));
-  NOR2_X1 g9430(.A1 (n_228), .A2 (n_54), .ZN (n_245));
-  AOI22_X1 g9431(.A1 (n_225), .A2 (data_q[7]), .B1 (n_224), .B2
-       (data_q[2]), .ZN (n_227));
-  OAI22_X1 g9432(.A1 (n_225), .A2 (data_q[7]), .B1 (n_224), .B2
-       (data_q[2]), .ZN (n_226));
-  INV_X1 g9532(.I (n_223), .ZN (n_247));
-  NOR2_X1 g9540(.A1 (n_240), .A2 (n_222), .ZN (n_288));
-  NAND2_X1 g9455(.A1 (n_195), .A2 (n_191), .ZN (n_221));
-  DFFSNQ_X1 \state_counter_reg[6] (.SN (1'b1), .CLK (clk), .D (n_176),
-       .Q (state_counter[6]));
-  NAND2_X1 g9604(.A1 (n_182), .A2 (n_171), .ZN (n_229));
-  AOI21_X1 g9613(.A1 (n_218), .A2 (n_214), .B (state[0]), .ZN (n_219));
-  NAND3_X1 g9614(.A1 (n_174), .A2 (n_218), .A3 (n_170), .ZN (n_364));
-  NAND3_X1 g9615(.A1 (n_216), .A2 (n_215), .A3 (n_214), .ZN (n_217));
-  NAND3_X1 g9616(.A1 (n_181), .A2 (n_168), .A3 (n_124), .ZN (n_213));
-  OAI22_X1 g9631(.A1 (n_159), .A2 (n_419), .B1 (n_31), .B2 (n_418), .ZN
-       (n_212));
-  OAI22_X1 g9648(.A1 (n_210), .A2 (n_419), .B1 (n_32), .B2 (n_418), .ZN
-       (n_211));
-  NOR2_X1 g9533(.A1 (n_209), .A2 (payload_length[7]), .ZN (n_223));
-  OAI21_X1 g9541(.A1 (n_186), .A2 (n_206), .B (n_208), .ZN (n_388));
-  NOR2_X1 g9560(.A1 (n_205), .A2 (n_206), .ZN (n_207));
-  NOR2_X1 g9563(.A1 (n_205), .A2 (n_132), .ZN (n_234));
-  OAI21_X1 g9580(.A1 (n_173), .A2 (n_172), .B (n_209), .ZN (n_237));
-  INV_X1 g9583(.I (n_183), .ZN (n_204));
-  INV_X1 g9584(.I (n_202), .ZN (n_203));
-  NOR2_X1 g9465(.A1 (n_177), .A2 (n_376), .ZN (n_201));
-  NAND2_X1 g9470(.A1 (n_178), .A2 (state_counter[8]), .ZN (n_228));
-  AND2_X1 g9669(.A1 (data_q2[3]), .A2 (n_355), .Z (n_200));
-  AND2_X1 g9670(.A1 (data_q2[4]), .A2 (n_355), .Z (n_199));
-  AND2_X1 g9671(.A1 (data_q2[1]), .A2 (n_355), .Z (n_198));
-  AND2_X1 g9672(.A1 (data_q2[0]), .A2 (n_355), .Z (n_197));
-  AND2_X1 g9673(.A1 (data_q2[7]), .A2 (n_355), .Z (n_196));
-  AOI22_X1 g9502(.A1 (n_188), .A2 (data_q[6]), .B1 (n_164), .B2
-       (data_q[5]), .ZN (n_195));
-  AND2_X1 g9674(.A1 (data_q2[2]), .A2 (n_355), .Z (n_194));
-  AND2_X1 g9675(.A1 (data_q2[5]), .A2 (n_355), .Z (n_193));
-  AND2_X1 g9676(.A1 (data_q2[6]), .A2 (n_355), .Z (n_192));
-  AOI21_X1 g9524(.A1 (n_190), .A2 (n_163), .B (n_165), .ZN (n_191));
-  DFFSNQ_X1 \state_counter_reg[5] (.SN (1'b1), .CLK (clk), .D (n_167),
-       .Q (state_counter[5]));
-  OAI22_X1 g9437(.A1 (n_188), .A2 (data_q[6]), .B1 (n_180), .B2
-       (lrc[7]), .ZN (n_189));
-  NAND2_X1 g9561(.A1 (n_186), .A2 (n_39), .ZN (n_187));
-  NAND2_X1 g9562(.A1 (n_186), .A2 (n_83), .ZN (n_240));
-  AOI22_X1 g9565(.A1 (n_161), .A2 (n_44), .B1 (n_68), .B2 (n_184), .ZN
-       (n_185));
-  FA_X1 g9585(.A (lrc[2]), .B (data_q[2]), .CI (n_128), .CO (n_202), .S
-       (n_183));
-  AOI21_X1 g9628(.A1 (n_137), .A2 (state_counter[3]), .B (n_160), .ZN
-       (n_182));
-  NOR4_X1 g9646(.A1 (n_150), .A2 (n_131), .A3 (n_102), .A4 (n_123), .ZN
-       (n_181));
-  XNOR2_X1 g9505(.A1 (n_180), .A2 (lrc[7]), .ZN (n_225));
-  XOR2_X1 g9530(.A1 (n_166), .A2 (state_counter[7]), .Z (n_177));
-  NOR2_X1 g9535(.A1 (n_157), .A2 (n_376), .ZN (n_176));
-  OAI21_X1 g9564(.A1 (n_162), .A2 (n_30), .B (n_174), .ZN (n_175));
-  INV_X1 g9576(.I (n_186), .ZN (n_205));
-  NAND2_X1 g9594(.A1 (n_173), .A2 (n_172), .ZN (n_209));
-  NAND3_X1 g9629(.A1 (n_152), .A2 (n_106), .A3 (state_counter[2]), .ZN
-       (n_171));
-  NAND2_X1 g9635(.A1 (n_169), .A2 (data_q[0]), .ZN (n_214));
-  NAND2_X1 g9638(.A1 (n_169), .A2 (n_122), .ZN (n_170));
-  XNOR2_X1 g9666(.A1 (n_130), .A2 (data_q[3]), .ZN (n_168));
-  NOR4_X1 g9682(.A1 (n_233), .A2 (n_69), .A3 (n_242), .A4 (n_51), .ZN
-       (n_419));
-  DFFSNQ_X1 \data_q2_reg[0] (.SN (1'b1), .CLK (clk), .D (n_149), .Q
-       (data_q2[0]));
-  DFFSNQ_X1 \data_q2_reg[1] (.SN (1'b1), .CLK (clk), .D (n_146), .Q
-       (data_q2[1]));
-  DFFSNQ_X1 \data_q2_reg[4] (.SN (1'b1), .CLK (clk), .D (n_148), .Q
-       (data_q2[4]));
-  DFFSNQ_X1 \data_q2_reg[6] (.SN (1'b1), .CLK (clk), .D (n_143), .Q
-       (data_q2[6]));
-  DFFSNQ_X1 \data_q2_reg[3] (.SN (1'b1), .CLK (clk), .D (n_145), .Q
-       (data_q2[3]));
-  DFFSNQ_X1 \data_q2_reg[7] (.SN (1'b1), .CLK (clk), .D (n_144), .Q
-       (data_q2[7]));
-  DFFSNQ_X1 \data_q2_reg[5] (.SN (1'b1), .CLK (clk), .D (n_142), .Q
-       (data_q2[5]));
-  NOR2_X1 g9596(.A1 (n_458), .A2 (n_376), .ZN (n_167));
-  NOR2_X1 g9543(.A1 (n_166), .A2 (n_0), .ZN (n_178));
-  OAI22_X1 g9550(.A1 (n_164), .A2 (data_q[5]), .B1 (n_190), .B2
-       (n_163), .ZN (n_165));
-  DFFSNQ_X1 \data_q2_reg[2] (.SN (1'b1), .CLK (clk), .D (n_147), .Q
-       (data_q2[2]));
-  NOR2_X1 g9577(.A1 (n_162), .A2 (state_counter[2]), .ZN (n_186));
-  DFFSNQ_X1 \state_counter_reg[4] (.SN (1'b1), .CLK (clk), .D (n_138),
+  wire n_24, n_25, n_26, n_27, n_28, n_29, n_30, n_32;
+  wire n_33, n_35, n_36, n_37, n_38, n_39, n_40, n_41;
+  wire n_42, n_43, n_44, n_45, n_46, n_48, n_49, n_50;
+  wire n_51, n_52, n_53, n_54, n_55, n_56, n_57, n_59;
+  wire n_60, n_61, n_62, n_63, n_64, n_65, n_66, n_67;
+  wire n_68, n_69, n_70, n_71, n_72, n_73, n_74, n_75;
+  wire n_76, n_77, n_78, n_79, n_80, n_81, n_82, n_83;
+  wire n_84, n_85, n_86, n_87, n_88, n_89, n_90, n_91;
+  wire n_92, n_93, n_94, n_95, n_96, n_97, n_98, n_99;
+  wire n_100, n_101, n_102, n_103, n_104, n_105, n_107, n_108;
+  wire n_109, n_110, n_111, n_112, n_113, n_114, n_115, n_116;
+  wire n_117, n_118, n_119, n_120, n_121, n_122, n_123, n_124;
+  wire n_125, n_126, n_127, n_128, n_130, n_131, n_132, n_133;
+  wire n_134, n_135, n_136, n_137, n_138, n_139, n_140, n_141;
+  wire n_142, n_143, n_144, n_145, n_147, n_148, n_149, n_150;
+  wire n_151, n_152, n_153, n_154, n_155, n_156, n_157, n_158;
+  wire n_159, n_160, n_161, n_162, n_163, n_164, n_165, n_166;
+  wire n_167, n_168, n_169, n_171, n_172, n_173, n_174, n_176;
+  wire n_177, n_178, n_179, n_180, n_181, n_182, n_183, n_184;
+  wire n_185, n_186, n_187, n_188, n_189, n_190, n_191, n_192;
+  wire n_193, n_194, n_195, n_196, n_197, n_198, n_199, n_200;
+  wire n_201, n_202, n_203, n_204, n_205, n_206, n_207, n_208;
+  wire n_209, n_210, n_212, n_213, n_214, n_215, n_217, n_218;
+  wire n_219, n_220, n_221, n_222, n_223, n_224, n_225, n_226;
+  wire n_227, n_228, n_229, n_230, n_231, n_232, n_233, n_234;
+  wire n_235, n_236, n_237, n_238, n_239, n_240, n_241, n_242;
+  wire n_243, n_244, n_245, n_246, n_247, n_249, n_250, n_251;
+  wire n_252, n_253, n_254, n_255, n_256, n_257, n_258, n_259;
+  wire n_260, n_261, n_262, n_263, n_264, n_265, n_266, n_267;
+  wire n_268, n_269, n_271, n_272, n_273, n_274, n_275, n_276;
+  wire n_277, n_278, n_279, n_280, n_281, n_282, n_283, n_284;
+  wire n_285, n_286, n_287, n_288, n_289, n_290, n_291, n_292;
+  wire n_293, n_294, n_295, n_296, n_297, n_298, n_299, n_300;
+  wire n_301, n_302, n_303, n_304, n_305, n_306, n_307, n_308;
+  wire n_309, n_310, n_312, n_313, n_314, n_315, n_316, n_317;
+  wire n_319, n_320, n_321, n_322, n_323, n_324, n_325, n_326;
+  wire n_327, n_328, n_329, n_331, n_332, n_333, n_334, n_335;
+  wire n_336, n_337, n_338, n_339, n_340, n_341, n_342, n_343;
+  wire n_344, n_345, n_346, n_347, n_348, n_349, n_351, n_352;
+  wire n_353, n_354, n_355, n_356, n_357, n_358, n_359, n_360;
+  wire n_361, n_362, n_363, n_364, n_365, n_366, n_367, n_368;
+  wire n_369, n_370, n_371, n_372, n_373, n_374, n_376, n_377;
+  wire n_378, n_379, n_380, n_386, n_389, n_390, n_391, n_392;
+  wire n_393, n_394, n_395, n_396, n_397, n_398, n_399, n_400;
+  wire n_401, n_402, n_403, n_404, n_405, n_406, n_407, n_408;
+  wire n_409, n_410, n_411, n_412, n_413, n_414, n_415, n_416;
+  wire n_417, n_418, n_419, n_420, n_421, n_422, n_423, n_424;
+  wire n_425, n_426, n_427, n_428, n_429, n_430, n_431, n_432;
+  wire n_433, n_434, n_435, n_436, n_437, n_438, n_439, n_440;
+  wire n_441, n_442, n_443, n_444, n_445, n_446, n_459, n_460;
+  wire n_461, n_462, n_463, n_464, n_465, n_466;
+  DFFSNQ_X1 \state_counter_reg[4] (.SN (1'b1), .CLK (clk), .D (n_437),
        .Q (state_counter[4]));
-  DFFSNQ_X1 \state_counter_reg[3] (.SN (1'b1), .CLK (clk), .D (n_134),
-       .Q (state_counter[3]));
-  DFFSNQ_X1 \state_counter_reg[0] (.SN (1'b1), .CLK (clk), .D (n_135),
-       .Q (state_counter[0]));
-  DFFSNQ_X1 \state_counter_reg[2] (.SN (1'b1), .CLK (clk), .D (n_136),
+  DFFSNQ_X1 \state_counter_reg[15] (.SN (1'b1), .CLK (clk), .D (n_439),
+       .Q (state_counter[15]));
+  DFFSNQ_X1 \state_counter_reg[2] (.SN (1'b1), .CLK (clk), .D (n_438),
        .Q (state_counter[2]));
-  INV_X1 g9597(.I (n_162), .ZN (n_161));
-  NOR3_X1 g9645(.A1 (n_151), .A2 (n_107), .A3 (n_49), .ZN (n_160));
-  XOR2_X1 g9686(.A1 (n_118), .A2 (n_127), .Z (n_159));
-  DFFSNQ_X1 \state_counter_reg[1] (.SN (1'b1), .CLK (clk), .D (n_133),
+  DFFSNQ_X1 \state_counter_reg[0] (.SN (1'b1), .CLK (clk), .D (n_441),
+       .Q (state_counter[0]));
+  DFFSNQ_X1 \state_counter_reg[10] (.SN (1'b1), .CLK (clk), .D (n_436),
+       .Q (state_counter[10]));
+  DFFSNQ_X1 \state_counter_reg[11] (.SN (1'b1), .CLK (clk), .D (n_435),
+       .Q (state_counter[11]));
+  DFFSNQ_X1 \state_counter_reg[12] (.SN (1'b1), .CLK (clk), .D (n_434),
+       .Q (state_counter[12]));
+  DFFSNQ_X1 \state_counter_reg[14] (.SN (1'b1), .CLK (clk), .D (n_433),
+       .Q (state_counter[14]));
+  DFFSNQ_X1 \state_counter_reg[5] (.SN (1'b1), .CLK (clk), .D (n_432),
+       .Q (state_counter[5]));
+  DFFSNQ_X1 \state_counter_reg[6] (.SN (1'b1), .CLK (clk), .D (n_431),
+       .Q (state_counter[6]));
+  DFFSNQ_X1 \state_counter_reg[7] (.SN (1'b1), .CLK (clk), .D (n_430),
+       .Q (state_counter[7]));
+  DFFSNQ_X1 \state_counter_reg[8] (.SN (1'b1), .CLK (clk), .D (n_443),
+       .Q (state_counter[8]));
+  DFFSNQ_X1 \state_counter_reg[9] (.SN (1'b1), .CLK (clk), .D (n_446),
+       .Q (state_counter[9]));
+  DFFSNQ_X1 \state_counter_reg[3] (.SN (1'b1), .CLK (clk), .D (n_445),
+       .Q (state_counter[3]));
+  DFFSNQ_X1 \state_counter_reg[13] (.SN (1'b1), .CLK (clk), .D (n_442),
+       .Q (state_counter[13]));
+  DFFSNQ_X1 \state_counter_reg[1] (.SN (1'b1), .CLK (clk), .D (n_440),
        .Q (state_counter[1]));
-  XNOR2_X1 g9549(.A1 (n_139), .A2 (n_158), .ZN (n_188));
-  XOR2_X1 g9582(.A1 (n_154), .A2 (state_counter[6]), .Z (n_157));
-  HA_X1 g9617(.A (n_6), .B (n_155), .CO (n_173), .S (n_156));
-  OR2_X1 g9599(.A1 (n_154), .A2 (n_236), .Z (n_166));
-  NAND4_X1 g9598(.A1 (n_115), .A2 (n_236), .A3 (n_85), .A4 (n_275), .ZN
-       (n_162));
-  INV_X1 g9662(.I (n_151), .ZN (n_152));
-  NOR4_X1 g9665(.A1 (n_99), .A2 (data_q[6]), .A3 (n_103), .A4
-       (data_q[2]), .ZN (n_169));
-  OAI21_X1 g9680(.A1 (n_101), .A2 (data_q[2]), .B (n_105), .ZN (n_150));
-  AND2_X1 g9708(.A1 (data_q1[0]), .A2 (n_355), .Z (n_149));
-  AND2_X1 g9709(.A1 (data_q1[4]), .A2 (n_355), .Z (n_148));
-  AND2_X1 g9710(.A1 (data_q1[2]), .A2 (n_355), .Z (n_147));
-  AND2_X1 g9711(.A1 (data_q1[1]), .A2 (n_355), .Z (n_146));
-  AND2_X1 g9712(.A1 (data_q1[3]), .A2 (n_355), .Z (n_145));
-  AND2_X1 g9713(.A1 (data_q1[7]), .A2 (n_355), .Z (n_144));
-  AND2_X1 g9717(.A1 (data_q1[6]), .A2 (n_355), .Z (n_143));
-  AND2_X1 g9718(.A1 (data_q1[5]), .A2 (n_355), .Z (n_142));
-  XNOR2_X1 g9600(.A1 (n_114), .A2 (n_140), .ZN (n_141));
-  NAND2_X1 g9559(.A1 (n_139), .A2 (n_158), .ZN (n_180));
-  XNOR2_X1 g9601(.A1 (n_129), .A2 (lrc[5]), .ZN (n_164));
-  NOR2_X1 g9642(.A1 (n_109), .A2 (n_376), .ZN (n_138));
-  NOR2_X1 g9663(.A1 (n_137), .A2 (state_counter[3]), .ZN (n_151));
-  NOR2_X1 g9677(.A1 (n_64), .A2 (n_376), .ZN (n_136));
-  NOR2_X1 g9678(.A1 (state_counter[0]), .A2 (n_376), .ZN (n_135));
-  NOR2_X1 g9679(.A1 (n_66), .A2 (n_376), .ZN (n_134));
-  AOI21_X1 g9681(.A1 (n_132), .A2 (n_20), .B (n_376), .ZN (n_133));
-  OAI22_X1 g9683(.A1 (n_125), .A2 (n_87), .B1 (n_120), .B2 (data_q[0]),
-       .ZN (n_131));
-  NAND2_X1 g9698(.A1 (n_100), .A2 (n_104), .ZN (n_130));
-  NOR2_X1 g9737(.A1 (n_206), .A2 (rst), .ZN (n_242));
-  NOR2_X1 g9606(.A1 (n_129), .A2 (lrc[5]), .ZN (n_139));
-  NAND2_X1 g9644(.A1 (n_110), .A2 (state_counter[5]), .ZN (n_154));
-  OAI21_X1 g9685(.A1 (n_117), .A2 (n_127), .B (n_78), .ZN (n_128));
-  NOR2_X1 g9695(.A1 (n_125), .A2 (n_140), .ZN (n_126));
-  NAND2_X1 g9696(.A1 (n_125), .A2 (n_140), .ZN (n_124));
-  OAI22_X1 g9703(.A1 (n_119), .A2 (n_122), .B1 (n_132), .B2
-       (data_q[1]), .ZN (n_123));
-  OAI22_X1 g9706(.A1 (n_120), .A2 (data_q[7]), .B1 (n_119), .B2 (n_96),
-       .ZN (n_121));
-  DFFSNQ_X1 \data_q1_reg[3] (.SN (1'b1), .CLK (clk), .D (n_75), .Q
-       (data_q1[3]));
-  DFFSNQ_X1 \data_q1_reg[0] (.SN (1'b1), .CLK (clk), .D (n_92), .Q
-       (data_q1[0]));
-  DFFSNQ_X1 \data_q1_reg[7] (.SN (1'b1), .CLK (clk), .D (n_74), .Q
-       (data_q1[7]));
-  DFFSNQ_X1 \data_q1_reg[1] (.SN (1'b1), .CLK (clk), .D (n_94), .Q
-       (data_q1[1]));
-  DFFSNQ_X1 \data_q1_reg[2] (.SN (1'b1), .CLK (clk), .D (n_88), .Q
-       (data_q1[2]));
-  DFFSNQ_X1 \data_q1_reg[6] (.SN (1'b1), .CLK (clk), .D (n_71), .Q
-       (data_q1[6]));
-  DFFSNQ_X1 \data_q1_reg[5] (.SN (1'b1), .CLK (clk), .D (n_72), .Q
-       (data_q1[5]));
-  NOR2_X1 g9732(.A1 (n_79), .A2 (n_117), .ZN (n_118));
-  NAND2_X1 g9733(.A1 (n_77), .A2 (n_116), .ZN (n_190));
-  NAND2_X1 g9738(.A1 (n_239), .A2 (n_108), .ZN (n_418));
-  DFFSNQ_X1 \data_q1_reg[4] (.SN (1'b1), .CLK (clk), .D (n_73), .Q
-       (data_q1[4]));
-  OAI21_X1 g9740(.A1 (lrc[0]), .A2 (data_q[0]), .B (n_127), .ZN
-       (n_210));
-  NOR4_X1 g9643(.A1 (n_55), .A2 (state_counter[14]), .A3
-       (state_counter[13]), .A4 (state_counter[12]), .ZN (n_115));
-  XNOR2_X1 g9647(.A1 (n_90), .A2 (lrc[4]), .ZN (n_114));
-  AND2_X1 g9661(.A1 (n_113), .A2 (n_112), .Z (n_155));
-  XOR2_X1 g9684(.A1 (n_86), .A2 (state_counter[4]), .Z (n_109));
-  AOI21_X1 g9699(.A1 (n_67), .A2 (payload_length[3]), .B (n_113), .ZN
-       (n_137));
-  NAND4_X1 g9700(.A1 (n_56), .A2 (n_41), .A3 (n_38), .A4 (n_108), .ZN
-       (n_376));
-  OAI22_X1 g9702(.A1 (n_106), .A2 (state_counter[2]), .B1 (n_8), .B2
-       (state_counter[1]), .ZN (n_107));
-  AOI22_X1 g9704(.A1 (n_104), .A2 (data_q[5]), .B1 (data_q[6]), .B2
-       (n_103), .ZN (n_105));
-  OAI22_X1 g9705(.A1 (n_104), .A2 (data_q[6]), .B1 (n_34), .B2 (n_93),
-       .ZN (n_102));
-  INV_X1 g9714(.I (n_125), .ZN (n_101));
-  NOR2_X1 g9716(.A1 (n_84), .A2 (n_63), .ZN (n_100));
-  NAND4_X1 g9719(.A1 (n_140), .A2 (data_q[7]), .A3 (data_q[1]), .A4
-       (data_q[3]), .ZN (n_99));
-  INV_X1 g9752(.I (n_98), .ZN (n_206));
-  AOI22_X1 g9744(.A1 (lrc[7]), .A2 (n_96), .B1 (n_95), .B2 (data_q[7]),
-       .ZN (n_97));
-  NOR2_X1 g9757(.A1 (n_93), .A2 (n_91), .ZN (n_94));
-  NOR2_X1 g9755(.A1 (n_122), .A2 (n_91), .ZN (n_92));
-  NAND2_X1 g9664(.A1 (n_90), .A2 (n_89), .ZN (n_129));
-  NOR2_X1 g9762(.A1 (n_87), .A2 (n_91), .ZN (n_88));
-  NOR2_X1 g9697(.A1 (n_86), .A2 (n_85), .ZN (n_110));
-  NOR2_X1 g9715(.A1 (n_84), .A2 (n_83), .ZN (n_125));
-  XNOR2_X1 g9721(.A1 (n_33), .A2 (data_q[1]), .ZN (n_82));
-  AOI22_X1 g9739(.A1 (rdy), .A2 (start), .B1 (n_9), .B2 (state[1]), .ZN
-       (n_81));
-  INV_X1 g9745(.I (n_78), .ZN (n_79));
-  INV_X1 g9748(.I (n_76), .ZN (n_77));
-  NOR2_X1 g9753(.A1 (n_328), .A2 (n_250), .ZN (n_98));
-  NOR2_X1 g9754(.A1 (n_59), .A2 (n_91), .ZN (n_75));
-  NOR2_X1 g9756(.A1 (n_96), .A2 (n_91), .ZN (n_74));
-  NOR2_X1 g9759(.A1 (n_140), .A2 (n_91), .ZN (n_73));
-  NOR2_X1 g9760(.A1 (n_103), .A2 (n_91), .ZN (n_72));
-  NOR2_X1 g9761(.A1 (n_70), .A2 (n_91), .ZN (n_71));
-  INV_X1 g9763(.I (n_222), .ZN (n_233));
-  INV_X1 g9767(.I (n_208), .ZN (n_239));
-  NOR2_X1 g9758(.A1 (n_68), .A2 (n_91), .ZN (n_69));
-  NOR2_X1 g9749(.A1 (lrc[3]), .A2 (data_q[3]), .ZN (n_76));
-  NOR2_X1 g9751(.A1 (lrc[1]), .A2 (data_q[1]), .ZN (n_117));
-  NAND2_X1 g9764(.A1 (n_174), .A2 (n_355), .ZN (n_222));
-  NAND2_X1 g9746(.A1 (lrc[1]), .A2 (data_q[1]), .ZN (n_78));
-  INV_X1 g9810(.I (n_384), .ZN (n_404));
-  NOR2_X1 g9707(.A1 (n_67), .A2 (payload_length[3]), .ZN (n_113));
-  INV_X1 g9734(.I (n_120), .ZN (n_119));
-  XOR2_X1 g9742(.A1 (n_50), .A2 (n_53), .Z (n_66));
-  NAND2_X1 g9750(.A1 (lrc[3]), .A2 (data_q[3]), .ZN (n_116));
-  NAND2_X1 g9765(.A1 (lrc[0]), .A2 (data_q[0]), .ZN (n_127));
-  NAND3_X1 g9768(.A1 (state[1]), .A2 (state[0]), .A3 (n_65), .ZN
-       (n_208));
-  HA_X1 g9743(.A (n_47), .B (n_40), .CO (n_63), .S (n_64));
-  OAI22_X1 g9772(.A1 (n_61), .A2 (n_57), .B1 (state[1]), .B2 (n_60),
-       .ZN (vld));
-  NOR2_X1 g9811(.A1 (n_58), .A2 (n_60), .ZN (n_384));
-  INV_X1 g9793(.I (data_q[1]), .ZN (n_93));
-  INV_X1 g9778(.I (data_q[7]), .ZN (n_96));
-  INV_X1 g9788(.I (data_q[3]), .ZN (n_59));
-  NOR2_X1 g9812(.A1 (n_58), .A2 (n_57), .ZN (n_232));
-  NOR2_X1 g9668(.A1 (n_163), .A2 (lrc[3]), .ZN (n_90));
-  NOR2_X1 g9747(.A1 (n_26), .A2 (n_35), .ZN (n_56));
-  NAND4_X1 g9701(.A1 (n_25), .A2 (n_54), .A3 (n_4), .A4 (n_53), .ZN
-       (n_55));
-  NAND2_X1 g9735(.A1 (n_52), .A2 (state_counter[1]), .ZN (n_120));
-  NOR2_X1 g9736(.A1 (n_52), .A2 (n_132), .ZN (n_84));
-  NOR3_X1 g9741(.A1 (n_184), .A2 (n_215), .A3 (rst), .ZN (n_51));
-  NAND2_X1 g9766(.A1 (n_50), .A2 (state_counter[3]), .ZN (n_86));
-  AOI21_X1 g9770(.A1 (n_48), .A2 (payload_length[2]), .B (n_45), .ZN
-       (n_106));
-  OAI22_X1 g9771(.A1 (n_48), .A2 (n_47), .B1 (payload_length[0]), .B2
-       (n_43), .ZN (n_49));
-  INV_X1 g9776(.I (data_q[5]), .ZN (n_103));
-  INV_X1 g9780(.I (data_q[0]), .ZN (n_122));
-  INV_X1 g9784(.I (data_q[2]), .ZN (n_87));
-  INV_X1 g9786(.I (data_q[4]), .ZN (n_140));
-  NAND2_X1 g9730(.A1 (n_52), .A2 (n_83), .ZN (n_104));
-  NAND2_X1 g9807(.A1 (n_215), .A2 (n_65), .ZN (n_328));
-  INV_X1 g9808(.I (n_355), .ZN (n_91));
-  INV_X1 g9782(.I (data_q[6]), .ZN (n_70));
-  DFFRNQ_X1 \last_state_reg[3] (.RN (1'b1), .CLK (clk), .D (n_21), .Q
-       (last_state[3]));
-  DFFSNQ_X1 \data_q_reg[1] (.SN (1'b1), .CLK (clk), .D (n_29), .Q
-       (data_q[1]));
-  DFFSNQ_X1 \state_reg[2] (.SN (1'b1), .CLK (clk), .D (n_23), .Q
-       (state[2]));
-  DFFSNQ_X1 \data_q_reg[6] (.SN (1'b1), .CLK (clk), .D (n_13), .Q
-       (data_q[6]));
-  DFFSNQ_X1 \data_q_reg[5] (.SN (1'b1), .CLK (clk), .D (n_15), .Q
-       (data_q[5]));
-  DFFSNQ_X1 \data_q_reg[2] (.SN (1'b1), .CLK (clk), .D (n_19), .Q
-       (data_q[2]));
-  DFFSNQ_X1 \state_reg[1] (.SN (1'b1), .CLK (clk), .D (n_18), .Q
-       (state[1]));
-  DFFSNQ_X1 \state_reg[3] (.SN (1'b1), .CLK (clk), .D (n_22), .Q
-       (state[3]));
-  DFFRNQ_X1 \last_state_reg[1] (.RN (1'b1), .CLK (clk), .D (n_17), .Q
-       (last_state[1]));
-  NOR2_X1 g9809(.A1 (n_57), .A2 (rst), .ZN (n_355));
-  DFFSNQ_X1 \data_q_reg[7] (.SN (1'b1), .CLK (clk), .D (n_28), .Q
-       (data_q[7]));
-  XNOR2_X1 g9720(.A1 (n_36), .A2 (n_46), .ZN (n_224));
-  DFFSNQ_X1 \data_q_reg[3] (.SN (1'b1), .CLK (clk), .D (n_14), .Q
-       (data_q[3]));
-  DFFRNQ_X1 \last_state_reg[2] (.RN (1'b1), .CLK (clk), .D (n_12), .Q
-       (last_state[2]));
-  DFFRNQ_X1 \last_state_reg[0] (.RN (1'b1), .CLK (clk), .D (n_10), .Q
-       (last_state[0]));
-  INV_X1 g9799(.I (n_45), .ZN (n_67));
-  INV_X1 g9803(.I (n_184), .ZN (n_216));
-  NAND2_X1 g9806(.A1 (n_43), .A2 (state_counter[2]), .ZN (n_44));
-  INV_X1 g9801(.I (n_42), .ZN (rdy));
-  DFFSNQ_X1 \state_reg[0] (.SN (1'b1), .CLK (clk), .D (n_27), .Q
+  NOR2_X1 g9652(.A1 (n_214), .A2 (n_444), .ZN (n_446));
+  NOR2_X1 g9653(.A1 (n_81), .A2 (n_444), .ZN (n_445));
+  NOR2_X1 g9651(.A1 (n_462), .A2 (n_444), .ZN (n_443));
+  NOR2_X1 g9654(.A1 (n_327), .A2 (n_444), .ZN (n_442));
+  NOR2_X1 g9655(.A1 (state_counter[0]), .A2 (n_444), .ZN (n_441));
+  AOI21_X1 g9656(.A1 (n_198), .A2 (n_16), .B (n_444), .ZN (n_440));
+  NOR2_X1 g9657(.A1 (n_352), .A2 (n_444), .ZN (n_439));
+  NOR2_X1 g9658(.A1 (n_41), .A2 (n_444), .ZN (n_438));
+  NOR2_X1 g9643(.A1 (n_108), .A2 (n_444), .ZN (n_437));
+  NOR2_X1 g9645(.A1 (n_461), .A2 (n_444), .ZN (n_436));
+  NOR2_X1 g9644(.A1 (n_267), .A2 (n_444), .ZN (n_435));
+  NOR2_X1 g9646(.A1 (n_460), .A2 (n_444), .ZN (n_434));
+  NOR2_X1 g9647(.A1 (n_459), .A2 (n_444), .ZN (n_433));
+  NOR2_X1 g9648(.A1 (n_127), .A2 (n_444), .ZN (n_432));
+  NOR2_X1 g9649(.A1 (n_463), .A2 (n_444), .ZN (n_431));
+  NOR2_X1 g9650(.A1 (n_160), .A2 (n_444), .ZN (n_430));
+  OR4_X1 g9659(.A1 (n_377), .A2 (state[3]), .A3 (n_429), .A4 (rst), .Z
+       (n_444));
+  DFFSNQ_X1 \state_reg[0] (.SN (1'b1), .CLK (clk), .D (n_428), .Q
        (state[0]));
-  DFFSNQ_X1 \data_q_reg[0] (.SN (1'b1), .CLK (clk), .D (n_16), .Q
+  XOR2_X1 g9661(.A1 (n_427), .A2 (state[0]), .Z (n_429));
+  AND2_X1 g9662(.A1 (n_427), .A2 (n_376), .Z (n_428));
+  NOR2_X1 g9663(.A1 (state[3]), .A2 (n_426), .ZN (n_427));
+  NAND4_X1 g9664(.A1 (n_425), .A2 (n_310), .A3 (n_358), .A4 (n_316),
+       .ZN (n_426));
+  NAND4_X1 g9665(.A1 (n_423), .A2 (n_424), .A3 (n_421), .A4 (n_195),
+       .ZN (n_425));
+  AOI22_X1 g9666(.A1 (n_422), .A2 (n_412), .B1 (n_420), .B2
+       (state_counter[14]), .ZN (n_424));
+  NAND4_X1 g9667(.A1 (n_422), .A2 (n_373), .A3 (n_407), .A4 (n_347),
+       .ZN (n_423));
+  AOI22_X1 g9668(.A1 (n_418), .A2 (n_409), .B1 (n_416), .B2
+       (state_counter[15]), .ZN (n_421));
+  NOR4_X1 g9669(.A1 (n_419), .A2 (n_417), .A3 (n_413), .A4 (n_397), .ZN
+       (n_422));
+  NOR2_X1 g9670(.A1 (n_419), .A2 (n_415), .ZN (n_420));
+  NOR2_X1 g9671(.A1 (n_419), .A2 (n_417), .ZN (n_418));
+  NOR2_X1 g9672(.A1 (n_416), .A2 (state_counter[15]), .ZN (n_419));
+  XNOR2_X1 g9674(.A1 (n_411), .A2 (payload_length[15]), .ZN (n_416));
+  NOR2_X1 g9675(.A1 (n_414), .A2 (state_counter[14]), .ZN (n_417));
+  DFFSNQ_X1 \lrc_reg[7] (.SN (1'b1), .CLK (clk), .D (n_410), .Q
+       (lrc[7]));
+  INV_X1 g9676(.I (n_414), .ZN (n_415));
+  OAI22_X1 g9680(.A1 (n_405), .A2 (state_counter[13]), .B1 (n_402), .B2
+       (n_398), .ZN (n_413));
+  NAND2_X1 g9684(.A1 (n_408), .A2 (n_401), .ZN (n_412));
+  HA_X1 g9677(.A (n_303), .B (n_404), .CO (n_411), .S (n_414));
+  INV_X1 g9701(.I (n_406), .ZN (n_410));
+  OAI21_X1 g9678(.A1 (n_403), .A2 (n_319), .B (n_399), .ZN (n_409));
+  DFFSNQ_X1 \lrc_reg[6] (.SN (1'b1), .CLK (clk), .D (n_400), .Q
+       (lrc[6]));
+  AOI22_X1 g9691(.A1 (n_407), .A2 (n_379), .B1 (n_380), .B2
+       (state_counter[11]), .ZN (n_408));
+  AOI22_X1 g9702(.A1 (n_392), .A2 (n_394), .B1 (lrc[7]), .B2 (n_393),
+       .ZN (n_406));
+  INV_X1 g9683(.I (n_404), .ZN (n_405));
+  XOR2_X1 g9686(.A1 (n_402), .A2 (payload_length[13]), .Z (n_403));
+  NOR2_X1 g9689(.A1 (n_391), .A2 (payload_length[13]), .ZN (n_404));
+  NAND3_X1 g9692(.A1 (n_390), .A2 (n_356), .A3 (state_counter[10]), .ZN
+       (n_401));
+  INV_X1 g9712(.I (n_395), .ZN (n_400));
+  DFFSNQ_X1 \state_reg[3] (.SN (1'b1), .CLK (clk), .D (n_378), .Q
+       (state[3]));
+  NAND3_X1 g9685(.A1 (n_396), .A2 (n_398), .A3 (state_counter[12]), .ZN
+       (n_399));
+  NOR2_X1 g9688(.A1 (n_396), .A2 (state_counter[12]), .ZN (n_397));
+  NOR2_X1 g9695(.A1 (n_389), .A2 (n_357), .ZN (n_407));
+  AOI22_X1 g9713(.A1 (n_372), .A2 (n_394), .B1 (lrc[6]), .B2 (n_393),
+       .ZN (n_395));
+  XOR2_X1 g9714(.A1 (n_371), .A2 (n_208), .Z (n_392));
+  INV_X1 g9693(.I (n_402), .ZN (n_391));
+  INV_X1 g9698(.I (n_389), .ZN (n_390));
+  DFFSNQ_X1 \state_reg[1] (.SN (1'b1), .CLK (clk), .D (n_369), .Q
+       (state[1]));
+  NAND2_X1 g9778(.A1 (n_367), .A2 (n_386), .ZN (out[7]));
+  NAND2_X1 g9779(.A1 (n_363), .A2 (n_386), .ZN (out[6]));
+  NAND2_X1 g9780(.A1 (n_359), .A2 (n_386), .ZN (out[5]));
+  NAND2_X1 g9781(.A1 (n_368), .A2 (n_386), .ZN (out[4]));
+  NAND2_X1 g9784(.A1 (n_364), .A2 (n_255), .ZN (out[2]));
+  NAND2_X1 g9785(.A1 (n_362), .A2 (n_254), .ZN (out[1]));
+  NAND2_X1 g9786(.A1 (n_360), .A2 (n_253), .ZN (out[0]));
+  NOR2_X1 g9699(.A1 (n_380), .A2 (state_counter[11]), .ZN (n_389));
+  INV_X1 g9710(.I (n_374), .ZN (n_379));
+  AND2_X1 g9719(.A1 (n_377), .A2 (n_376), .Z (n_378));
+  HA_X1 g9694(.A (n_305), .B (n_370), .CO (n_402), .S (n_396));
+  DFFSNQ_X1 \state_reg[2] (.SN (1'b1), .CLK (clk), .D (n_355), .Q
+       (state[2]));
+  DFFSNQ_X1 \lrc_reg[5] (.SN (1'b1), .CLK (clk), .D (n_351), .Q
+       (lrc[5]));
+  NAND2_X1 g9783(.A1 (n_289), .A2 (n_353), .ZN (out[3]));
+  AOI22_X1 g9711(.A1 (n_348), .A2 (state_counter[8]), .B1 (n_339), .B2
+       (state_counter[9]), .ZN (n_374));
+  AOI21_X1 g9738(.A1 (n_344), .A2 (n_286), .B (n_314), .ZN (n_373));
+  FA_X1 g9723(.A (lrc[6]), .B (data_q[6]), .CI (n_321), .CO (n_371), .S
+       (n_372));
+  AOI21_X1 g9705(.A1 (n_349), .A2 (payload_length[11]), .B (n_370), .ZN
+       (n_380));
+  NAND3_X1 g9720(.A1 (n_328), .A2 (n_354), .A3 (n_234), .ZN (n_369));
+  AOI22_X1 g9828(.A1 (n_366), .A2 (data_q6[4]), .B1 (n_365), .B2
+       (data_q4[4]), .ZN (n_368));
+  AOI22_X1 g9829(.A1 (n_366), .A2 (data_q6[7]), .B1 (n_365), .B2
+       (data_q4[7]), .ZN (n_367));
+  AOI22_X1 g9830(.A1 (n_366), .A2 (data_q6[2]), .B1 (n_361), .B2
+       (last_state[2]), .ZN (n_364));
+  AOI22_X1 g9831(.A1 (n_366), .A2 (data_q6[6]), .B1 (n_365), .B2
+       (data_q4[6]), .ZN (n_363));
+  AOI22_X1 g9832(.A1 (n_366), .A2 (data_q6[1]), .B1 (n_361), .B2
+       (last_state[1]), .ZN (n_362));
+  AOI22_X1 g9833(.A1 (n_366), .A2 (data_q6[0]), .B1 (n_361), .B2
+       (last_state[0]), .ZN (n_360));
+  AOI22_X1 g9834(.A1 (n_366), .A2 (data_q6[5]), .B1 (n_365), .B2
+       (data_q4[5]), .ZN (n_359));
+  NAND2_X1 g9727(.A1 (n_358), .A2 (n_346), .ZN (n_377));
+  NOR2_X1 g9708(.A1 (n_356), .A2 (state_counter[10]), .ZN (n_357));
+  NAND3_X1 g9728(.A1 (n_354), .A2 (n_51), .A3 (n_242), .ZN (n_355));
+  NAND2_X1 g9839(.A1 (n_366), .A2 (data_q6[3]), .ZN (n_353));
+  XOR2_X1 g9673(.A1 (n_341), .A2 (state_counter[15]), .Z (n_352));
+  INV_X1 g9736(.I (n_345), .ZN (n_351));
+  NOR2_X1 g9707(.A1 (n_349), .A2 (payload_length[11]), .ZN (n_370));
+  AND2_X1 g9718(.A1 (n_347), .A2 (n_313), .Z (n_348));
+  AOI22_X1 g9733(.A1 (n_324), .A2 (n_343), .B1 (n_194), .B2 (n_174),
+       .ZN (n_346));
+  AOI22_X1 g9737(.A1 (n_322), .A2 (n_394), .B1 (lrc[5]), .B2 (n_393),
+       .ZN (n_345));
+  AOI22_X1 g9747(.A1 (n_326), .A2 (n_285), .B1 (n_251), .B2
+       (state_counter[7]), .ZN (n_344));
+  AOI21_X1 g9721(.A1 (n_325), .A2 (payload_length[10]), .B (n_340), .ZN
+       (n_356));
+  NAND3_X1 g9731(.A1 (n_187), .A2 (n_342), .A3 (n_343), .ZN (n_358));
+  NAND4_X1 g9732(.A1 (n_188), .A2 (n_342), .A3 (n_186), .A4 (n_393),
+       .ZN (n_354));
+  DFFSNQ_X1 \data_q6_reg[4] (.SN (1'b1), .CLK (clk), .D (n_334), .Q
+       (data_q6[4]));
+  DFFSNQ_X1 \data_q6_reg[3] (.SN (1'b1), .CLK (clk), .D (n_335), .Q
+       (data_q6[3]));
+  DFFSNQ_X1 \data_q6_reg[2] (.SN (1'b1), .CLK (clk), .D (n_337), .Q
+       (data_q6[2]));
+  DFFSNQ_X1 \data_q6_reg[7] (.SN (1'b1), .CLK (clk), .D (n_331), .Q
+       (data_q6[7]));
+  DFFSNQ_X1 \data_q6_reg[1] (.SN (1'b1), .CLK (clk), .D (n_323), .Q
+       (data_q6[1]));
+  DFFSNQ_X1 \data_q6_reg[0] (.SN (1'b1), .CLK (clk), .D (n_338), .Q
+       (data_q6[0]));
+  DFFSNQ_X1 \data_q6_reg[6] (.SN (1'b1), .CLK (clk), .D (n_332), .Q
+       (data_q6[6]));
+  DFFSNQ_X1 \data_q6_reg[5] (.SN (1'b1), .CLK (clk), .D (n_333), .Q
+       (data_q6[5]));
+  NAND2_X1 g9681(.A1 (n_329), .A2 (state_counter[14]), .ZN (n_341));
+  INV_X1 g9724(.I (n_340), .ZN (n_349));
+  OR2_X1 g9726(.A1 (n_339), .A2 (state_counter[9]), .Z (n_347));
+  DFFSNQ_X1 \lrc_reg[4] (.SN (1'b1), .CLK (clk), .D (n_317), .Q
+       (lrc[4]));
+  AND2_X1 g9888(.A1 (data_q5[0]), .A2 (n_336), .Z (n_338));
+  AND2_X1 g9890(.A1 (data_q5[2]), .A2 (n_336), .Z (n_337));
+  AND2_X1 g9891(.A1 (data_q5[3]), .A2 (n_336), .Z (n_335));
+  AND2_X1 g9892(.A1 (data_q5[4]), .A2 (n_336), .Z (n_334));
+  AND2_X1 g9893(.A1 (data_q5[5]), .A2 (n_336), .Z (n_333));
+  AND2_X1 g9894(.A1 (data_q5[6]), .A2 (n_336), .Z (n_332));
+  AND2_X1 g9895(.A1 (data_q5[7]), .A2 (n_336), .Z (n_331));
+  AOI22_X1 g9757(.A1 (n_246), .A2 (n_241), .B1 (n_466), .B2 (n_376),
+       .ZN (n_328));
+  XOR2_X1 g9687(.A1 (n_320), .A2 (state_counter[13]), .Z (n_327));
+  AOI21_X1 g9789(.A1 (n_288), .A2 (n_190), .B (n_218), .ZN (n_326));
+  NOR2_X1 g9725(.A1 (n_325), .A2 (payload_length[10]), .ZN (n_340));
+  INV_X1 g9744(.I (n_342), .ZN (n_324));
+  AND2_X1 g9889(.A1 (data_q5[1]), .A2 (n_336), .Z (n_323));
+  FA_X1 g9748(.A (lrc[5]), .B (data_q[5]), .CI (n_238), .CO (n_321), .S
+       (n_322));
+  DFFSNQ_X1 \payload_length_reg[11] (.SN (1'b1), .CLK (clk), .D
+       (n_307), .Q (payload_length[11]));
+  DFFSNQ_X1 \payload_length_reg[0] (.SN (1'b1), .CLK (clk), .D (n_309),
+       .Q (payload_length[0]));
+  DFFSNQ_X1 \payload_length_reg[12] (.SN (1'b1), .CLK (clk), .D
+       (n_306), .Q (payload_length[12]));
+  DFFSNQ_X1 \payload_length_reg[15] (.SN (1'b1), .CLK (clk), .D
+       (n_300), .Q (payload_length[15]));
+  DFFSNQ_X1 \payload_length_reg[3] (.SN (1'b1), .CLK (clk), .D (n_298),
+       .Q (payload_length[3]));
+  DFFSNQ_X1 \payload_length_reg[4] (.SN (1'b1), .CLK (clk), .D (n_296),
+       .Q (payload_length[4]));
+  DFFSNQ_X1 \payload_length_reg[6] (.SN (1'b1), .CLK (clk), .D (n_294),
+       .Q (payload_length[6]));
+  DFFSNQ_X1 \payload_length_reg[1] (.SN (1'b1), .CLK (clk), .D (n_299),
+       .Q (payload_length[1]));
+  DFFSNQ_X1 \payload_length_reg[2] (.SN (1'b1), .CLK (clk), .D (n_297),
+       .Q (payload_length[2]));
+  DFFSNQ_X1 \payload_length_reg[8] (.SN (1'b1), .CLK (clk), .D (n_292),
+       .Q (payload_length[8]));
+  DFFSNQ_X1 \payload_length_reg[9] (.SN (1'b1), .CLK (clk), .D (n_291),
+       .Q (payload_length[9]));
+  DFFSNQ_X1 \payload_length_reg[13] (.SN (1'b1), .CLK (clk), .D
+       (n_290), .Q (payload_length[13]));
+  DFFSNQ_X1 \payload_length_reg[10] (.SN (1'b1), .CLK (clk), .D
+       (n_308), .Q (payload_length[10]));
+  DFFSNQ_X1 \payload_length_reg[5] (.SN (1'b1), .CLK (clk), .D (n_295),
+       .Q (payload_length[5]));
+  NOR2_X1 g9690(.A1 (n_320), .A2 (n_319), .ZN (n_329));
+  DFFSNQ_X1 \payload_length_reg[7] (.SN (1'b1), .CLK (clk), .D (n_293),
+       .Q (payload_length[7]));
+  AOI21_X1 g9735(.A1 (n_287), .A2 (payload_length[9]), .B (n_315), .ZN
+       (n_339));
+  DFFSNQ_X1 \payload_length_reg[14] (.SN (1'b1), .CLK (clk), .D
+       (n_304), .Q (payload_length[14]));
+  NOR4_X1 g9745(.A1 (n_284), .A2 (n_250), .A3 (n_76), .A4 (n_142), .ZN
+       (n_342));
+  DFFSNQ_X1 \data_q5_reg[4] (.SN (1'b1), .CLK (clk), .D (n_277), .Q
+       (data_q5[4]));
+  DFFSNQ_X1 \data_q5_reg[3] (.SN (1'b1), .CLK (clk), .D (n_280), .Q
+       (data_q5[3]));
+  DFFSNQ_X1 \data_q5_reg[0] (.SN (1'b1), .CLK (clk), .D (n_279), .Q
+       (data_q5[0]));
+  DFFSNQ_X1 \data_q5_reg[1] (.SN (1'b1), .CLK (clk), .D (n_283), .Q
+       (data_q5[1]));
+  DFFSNQ_X1 \data_q5_reg[6] (.SN (1'b1), .CLK (clk), .D (n_278), .Q
+       (data_q5[6]));
+  DFFSNQ_X1 \data_q5_reg[5] (.SN (1'b1), .CLK (clk), .D (n_281), .Q
+       (data_q5[5]));
+  DFFSNQ_X1 \data_q5_reg[2] (.SN (1'b1), .CLK (clk), .D (n_282), .Q
+       (data_q5[2]));
+  DFFSNQ_X1 \data_q5_reg[7] (.SN (1'b1), .CLK (clk), .D (n_276), .Q
+       (data_q5[7]));
+  INV_X1 g9774(.I (n_312), .ZN (n_317));
+  AOI22_X1 g9826(.A1 (n_247), .A2 (n_49), .B1 (n_88), .B2 (n_192), .ZN
+       (n_316));
+  INV_X1 g9740(.I (n_315), .ZN (n_325));
+  NOR2_X1 g9742(.A1 (n_313), .A2 (state_counter[8]), .ZN (n_314));
+  AOI22_X1 g9775(.A1 (n_239), .A2 (n_394), .B1 (lrc[4]), .B2 (n_393),
+       .ZN (n_312));
+  INV_X1 g9790(.I (n_275), .ZN (n_309));
+  NAND2_X1 g9700(.A1 (n_269), .A2 (state_counter[12]), .ZN (n_320));
+  INV_X1 g9792(.I (n_274), .ZN (n_308));
+  INV_X1 g9794(.I (n_273), .ZN (n_307));
+  OAI22_X1 g9796(.A1 (n_305), .A2 (n_302), .B1 (n_301), .B2 (n_138),
+       .ZN (n_306));
+  OAI22_X1 g9797(.A1 (n_303), .A2 (n_302), .B1 (n_301), .B2 (n_83), .ZN
+       (n_304));
+  INV_X1 g9798(.I (n_268), .ZN (n_300));
+  INV_X1 g9800(.I (n_266), .ZN (n_299));
+  INV_X1 g9802(.I (n_263), .ZN (n_298));
+  INV_X1 g9804(.I (n_262), .ZN (n_297));
+  INV_X1 g9806(.I (n_261), .ZN (n_296));
+  INV_X1 g9808(.I (n_260), .ZN (n_295));
+  INV_X1 g9810(.I (n_259), .ZN (n_294));
+  INV_X1 g9812(.I (n_258), .ZN (n_293));
+  INV_X1 g9814(.I (n_257), .ZN (n_292));
+  INV_X1 g9816(.I (n_256), .ZN (n_291));
+  OAI22_X1 g9818(.A1 (n_1), .A2 (n_302), .B1 (n_301), .B2 (n_153), .ZN
+       (n_290));
+  AOI22_X1 g9827(.A1 (n_365), .A2 (data_q4[3]), .B1 (n_361), .B2
+       (last_state[3]), .ZN (n_289));
+  OAI21_X1 g9842(.A1 (n_189), .A2 (state_counter[5]), .B (n_245), .ZN
+       (n_288));
+  NOR2_X1 g9741(.A1 (n_287), .A2 (payload_length[9]), .ZN (n_315));
+  NAND3_X1 g9746(.A1 (n_285), .A2 (n_217), .A3 (state_counter[6]), .ZN
+       (n_286));
+  AOI21_X1 g9749(.A1 (n_244), .A2 (payload_length[8]), .B (n_252), .ZN
+       (n_313));
+  OAI21_X1 g9756(.A1 (n_236), .A2 (n_235), .B (n_243), .ZN (n_284));
+  AND2_X1 g9922(.A1 (data_q4[1]), .A2 (n_336), .Z (n_283));
+  AND2_X1 g9923(.A1 (data_q4[2]), .A2 (n_336), .Z (n_282));
+  AND2_X1 g9924(.A1 (data_q4[5]), .A2 (n_336), .Z (n_281));
+  AND2_X1 g9925(.A1 (data_q4[3]), .A2 (n_336), .Z (n_280));
+  AND2_X1 g9926(.A1 (data_q4[0]), .A2 (n_336), .Z (n_279));
+  AND2_X1 g9927(.A1 (data_q4[6]), .A2 (n_336), .Z (n_278));
+  AND2_X1 g9928(.A1 (data_q4[4]), .A2 (n_336), .Z (n_277));
+  AND2_X1 g9929(.A1 (data_q4[7]), .A2 (n_336), .Z (n_276));
+  AOI22_X1 g9791(.A1 (payload_length[0]), .A2 (n_265), .B1 (n_264), .B2
+       (data_q[0]), .ZN (n_275));
+  AOI22_X1 g9793(.A1 (payload_length[10]), .A2 (n_272), .B1 (n_271),
+       .B2 (data_q[2]), .ZN (n_274));
+  AOI22_X1 g9795(.A1 (payload_length[11]), .A2 (n_272), .B1 (n_271),
+       .B2 (data_q[3]), .ZN (n_273));
+  AOI22_X1 g9799(.A1 (payload_length[15]), .A2 (n_272), .B1 (n_271),
+       .B2 (data_q[7]), .ZN (n_268));
+  XOR2_X1 g9706(.A1 (n_249), .A2 (state_counter[11]), .Z (n_267));
+  AOI22_X1 g9801(.A1 (payload_length[1]), .A2 (n_265), .B1 (n_264), .B2
+       (data_q[1]), .ZN (n_266));
+  AOI22_X1 g9803(.A1 (payload_length[3]), .A2 (n_265), .B1 (n_264), .B2
+       (data_q[3]), .ZN (n_263));
+  AOI22_X1 g9805(.A1 (payload_length[2]), .A2 (n_265), .B1 (n_264), .B2
+       (data_q[2]), .ZN (n_262));
+  AOI22_X1 g9807(.A1 (payload_length[4]), .A2 (n_265), .B1 (n_264), .B2
+       (data_q[4]), .ZN (n_261));
+  AOI22_X1 g9809(.A1 (payload_length[5]), .A2 (n_265), .B1 (n_264), .B2
+       (data_q[5]), .ZN (n_260));
+  AOI22_X1 g9811(.A1 (payload_length[6]), .A2 (n_265), .B1 (n_264), .B2
+       (data_q[6]), .ZN (n_259));
+  AOI22_X1 g9813(.A1 (payload_length[7]), .A2 (n_265), .B1 (n_264), .B2
+       (data_q[7]), .ZN (n_258));
+  AOI22_X1 g9815(.A1 (payload_length[8]), .A2 (n_272), .B1 (n_271), .B2
+       (data_q[0]), .ZN (n_257));
+  AOI22_X1 g9817(.A1 (payload_length[9]), .A2 (n_272), .B1 (n_271), .B2
+       (data_q[1]), .ZN (n_256));
+  NAND2_X1 g9836(.A1 (n_365), .A2 (data_q4[2]), .ZN (n_255));
+  NAND2_X1 g9837(.A1 (n_365), .A2 (data_q4[1]), .ZN (n_254));
+  NAND2_X1 g9838(.A1 (n_365), .A2 (data_q4[0]), .ZN (n_253));
+  INV_X1 g9752(.I (n_252), .ZN (n_287));
+  OR2_X1 g9754(.A1 (n_251), .A2 (state_counter[7]), .Z (n_285));
+  NAND2_X1 g9782(.A1 (n_237), .A2 (n_201), .ZN (n_250));
+  NOR2_X1 g9709(.A1 (n_249), .A2 (n_9), .ZN (n_269));
+  NAND2_X1 g9823(.A1 (n_232), .A2 (n_48), .ZN (n_310));
+  INV_X1 g9849(.I (n_246), .ZN (n_247));
+  NAND2_X1 g9855(.A1 (n_230), .A2 (n_229), .ZN (n_245));
+  NOR2_X1 g9753(.A1 (n_244), .A2 (payload_length[8]), .ZN (n_252));
+  DFFSNQ_X1 \data_q4_reg[4] (.SN (1'b1), .CLK (clk), .D (n_227), .Q
+       (data_q4[4]));
+  DFFSNQ_X1 \data_q4_reg[5] (.SN (1'b1), .CLK (clk), .D (n_220), .Q
+       (data_q4[5]));
+  DFFSNQ_X1 \data_q4_reg[3] (.SN (1'b1), .CLK (clk), .D (n_224), .Q
+       (data_q4[3]));
+  DFFSNQ_X1 \data_q4_reg[2] (.SN (1'b1), .CLK (clk), .D (n_225), .Q
+       (data_q4[2]));
+  DFFSNQ_X1 \data_q4_reg[1] (.SN (1'b1), .CLK (clk), .D (n_226), .Q
+       (data_q4[1]));
+  DFFSNQ_X1 \data_q4_reg[7] (.SN (1'b1), .CLK (clk), .D (n_221), .Q
+       (data_q4[7]));
+  DFFSNQ_X1 \data_q4_reg[6] (.SN (1'b1), .CLK (clk), .D (n_222), .Q
+       (data_q4[6]));
+  DFFSNQ_X1 \data_q4_reg[0] (.SN (1'b1), .CLK (clk), .D (n_223), .Q
+       (data_q4[0]));
+  NOR4_X1 g9776(.A1 (n_207), .A2 (n_184), .A3 (n_154), .A4 (n_139), .ZN
+       (n_243));
+  NAND3_X1 g9840(.A1 (n_240), .A2 (n_212), .A3 (n_241), .ZN (n_242));
+  INV_X1 g9843(.I (n_272), .ZN (n_302));
+  NOR2_X1 g9850(.A1 (n_240), .A2 (n_213), .ZN (n_246));
+  FA_X1 g9835(.A (lrc[4]), .B (data_q[4]), .CI (n_183), .CO (n_238), .S
+       (n_239));
+  DFFSNQ_X1 \lrc_reg[3] (.SN (1'b1), .CLK (clk), .D (n_202), .Q
+       (lrc[3]));
+  AOI21_X1 g9788(.A1 (n_210), .A2 (payload_length[7]), .B (n_219), .ZN
+       (n_251));
+  AOI21_X1 g9825(.A1 (n_236), .A2 (n_235), .B (n_209), .ZN (n_237));
+  NAND2_X1 g9729(.A1 (n_215), .A2 (state_counter[10]), .ZN (n_249));
+  OAI21_X1 g9844(.A1 (n_231), .A2 (n_233), .B (n_234), .ZN (n_272));
+  OAI21_X1 g9845(.A1 (n_203), .A2 (n_233), .B (n_234), .ZN (n_265));
+  OAI22_X1 g9847(.A1 (n_158), .A2 (n_36), .B1 (n_231), .B2 (n_206), .ZN
+       (n_232));
+  NOR2_X1 g9852(.A1 (n_204), .A2 (n_233), .ZN (n_264));
+  OAI21_X1 g9872(.A1 (n_228), .A2 (state_counter[4]), .B (n_126), .ZN
+       (n_230));
+  NAND2_X1 g9887(.A1 (n_228), .A2 (state_counter[4]), .ZN (n_229));
+  AND2_X1 g9949(.A1 (data_q3[4]), .A2 (n_336), .Z (n_227));
+  AND2_X1 g9951(.A1 (data_q3[1]), .A2 (n_336), .Z (n_226));
+  AND2_X1 g9952(.A1 (data_q3[2]), .A2 (n_336), .Z (n_225));
+  AND2_X1 g9953(.A1 (data_q3[3]), .A2 (n_336), .Z (n_224));
+  AND2_X1 g9954(.A1 (data_q3[0]), .A2 (n_336), .Z (n_223));
+  AND2_X1 g9955(.A1 (data_q3[6]), .A2 (n_336), .Z (n_222));
+  AND2_X1 g9956(.A1 (data_q3[7]), .A2 (n_336), .Z (n_221));
+  AND2_X1 g9957(.A1 (data_q3[5]), .A2 (n_336), .Z (n_220));
+  INV_X1 g9820(.I (n_219), .ZN (n_244));
+  NOR2_X1 g9822(.A1 (n_217), .A2 (state_counter[6]), .ZN (n_218));
+  INV_X1 g9853(.I (n_271), .ZN (n_301));
+  OR2_X1 g9856(.A1 (n_197), .A2 (n_343), .Z (n_365));
+  XOR2_X1 g9739(.A1 (n_205), .A2 (state_counter[9]), .Z (n_214));
+  INV_X1 g9882(.I (n_212), .ZN (n_213));
+  NOR2_X1 g9821(.A1 (n_210), .A2 (payload_length[7]), .ZN (n_219));
+  AOI21_X1 g9841(.A1 (n_200), .A2 (lrc[7]), .B (n_208), .ZN (n_209));
+  XOR2_X1 g9846(.A1 (n_156), .A2 (data_q[6]), .Z (n_207));
+  NOR2_X1 g9854(.A1 (n_199), .A2 (n_233), .ZN (n_271));
+  OAI21_X1 g9860(.A1 (n_193), .A2 (n_206), .B (n_185), .ZN (n_366));
+  NOR2_X1 g9743(.A1 (n_205), .A2 (n_6), .ZN (n_215));
+  INV_X1 g9877(.I (n_203), .ZN (n_204));
+  NOR4_X1 g9883(.A1 (n_172), .A2 (n_112), .A3 (n_102), .A4 (n_90), .ZN
+       (n_212));
+  OAI22_X1 g9884(.A1 (n_181), .A2 (n_178), .B1 (n_182), .B2 (n_177),
+       .ZN (n_202));
+  DFFSNQ_X1 \lrc_reg[2] (.SN (1'b1), .CLK (clk), .D (n_179), .Q
+       (lrc[2]));
+  OAI21_X1 g9911(.A1 (n_113), .A2 (n_134), .B (n_176), .ZN (n_228));
+  DFFSNQ_X1 \data_q3_reg[5] (.SN (1'b1), .CLK (clk), .D (n_162), .Q
+       (data_q3[5]));
+  DFFSNQ_X1 \data_q3_reg[1] (.SN (1'b1), .CLK (clk), .D (n_165), .Q
+       (data_q3[1]));
+  DFFSNQ_X1 \data_q3_reg[7] (.SN (1'b1), .CLK (clk), .D (n_168), .Q
+       (data_q3[7]));
+  DFFSNQ_X1 \data_q3_reg[6] (.SN (1'b1), .CLK (clk), .D (n_161), .Q
+       (data_q3[6]));
+  DFFSNQ_X1 \data_q3_reg[4] (.SN (1'b1), .CLK (clk), .D (n_164), .Q
+       (data_q3[4]));
+  DFFSNQ_X1 \data_q3_reg[3] (.SN (1'b1), .CLK (clk), .D (n_163), .Q
+       (data_q3[3]));
+  DFFSNQ_X1 \data_q3_reg[2] (.SN (1'b1), .CLK (clk), .D (n_167), .Q
+       (data_q3[2]));
+  DFFSNQ_X1 \data_q3_reg[0] (.SN (1'b1), .CLK (clk), .D (n_166), .Q
+       (data_q3[0]));
+  DFFSNQ_X1 \lrc_reg[1] (.SN (1'b1), .CLK (clk), .D (n_171), .Q
+       (lrc[1]));
+  NAND2_X1 g9851(.A1 (n_200), .A2 (n_208), .ZN (n_201));
+  AOI21_X1 g9857(.A1 (n_159), .A2 (payload_length[6]), .B (n_191), .ZN
+       (n_217));
+  INV_X1 g9873(.I (n_199), .ZN (n_231));
+  NOR2_X1 g9878(.A1 (n_196), .A2 (n_198), .ZN (n_203));
+  AND2_X1 g9879(.A1 (n_196), .A2 (n_195), .Z (n_197));
+  NAND2_X1 g9755(.A1 (n_169), .A2 (state_counter[8]), .ZN (n_205));
+  OAI22_X1 g9934(.A1 (n_193), .A2 (n_157), .B1 (n_35), .B2 (n_173), .ZN
+       (n_194));
+  OAI22_X1 g9858(.A1 (n_240), .A2 (n_206), .B1 (state[2]), .B2 (start),
+       .ZN (n_192));
+  INV_X1 g9869(.I (n_191), .ZN (n_210));
+  NAND2_X1 g9871(.A1 (n_189), .A2 (state_counter[5]), .ZN (n_190));
+  NAND2_X1 g9874(.A1 (n_188), .A2 (n_145), .ZN (n_199));
+  NAND2_X1 g9875(.A1 (n_188), .A2 (n_186), .ZN (n_187));
+  NAND2_X1 g9880(.A1 (n_188), .A2 (n_195), .ZN (n_185));
+  DFFSNQ_X1 \lrc_reg[0] (.SN (1'b1), .CLK (clk), .D (n_148), .Q
+       (lrc[0]));
+  INV_X1 g9896(.I (n_188), .ZN (n_196));
+  INV_X1 g9900(.I (n_151), .ZN (n_184));
+  OAI22_X1 g9915(.A1 (n_180), .A2 (n_50), .B1 (n_182), .B2 (n_131), .ZN
+       (n_183));
+  XOR2_X1 g9916(.A1 (n_180), .A2 (n_152), .Z (n_181));
+  OAI22_X1 g9918(.A1 (n_137), .A2 (n_178), .B1 (n_87), .B2 (n_177), .ZN
+       (n_179));
+  AOI22_X1 g9931(.A1 (n_135), .A2 (state_counter[2]), .B1 (n_114), .B2
+       (state_counter[3]), .ZN (n_176));
+  NAND4_X1 g9933(.A1 (n_133), .A2 (n_132), .A3 (n_93), .A4 (n_62), .ZN
+       (n_172));
+  OAI22_X1 g9946(.A1 (n_130), .A2 (n_178), .B1 (n_32), .B2 (n_177), .ZN
+       (n_171));
+  AND2_X1 g9980(.A1 (data_q2[7]), .A2 (n_336), .Z (n_168));
+  AND2_X1 g9981(.A1 (data_q2[2]), .A2 (n_336), .Z (n_167));
+  AND2_X1 g9982(.A1 (data_q2[0]), .A2 (n_336), .Z (n_166));
+  AND2_X1 g9983(.A1 (data_q2[1]), .A2 (n_336), .Z (n_165));
+  AND2_X1 g9984(.A1 (data_q2[4]), .A2 (n_336), .Z (n_164));
+  AND2_X1 g9985(.A1 (data_q2[3]), .A2 (n_336), .Z (n_163));
+  AND2_X1 g9986(.A1 (data_q2[5]), .A2 (n_336), .Z (n_162));
+  AND2_X1 g9987(.A1 (data_q2[6]), .A2 (n_336), .Z (n_161));
+  XOR2_X1 g9819(.A1 (n_147), .A2 (state_counter[7]), .Z (n_160));
+  NOR2_X1 g9870(.A1 (n_159), .A2 (payload_length[6]), .ZN (n_191));
+  OAI21_X1 g9876(.A1 (n_155), .A2 (n_30), .B (n_157), .ZN (n_158));
+  HA_X1 g9885(.A (n_8), .B (n_117), .CO (n_200), .S (n_156));
+  NOR2_X1 g9897(.A1 (n_155), .A2 (state_counter[2]), .ZN (n_188));
+  OAI22_X1 g9899(.A1 (n_150), .A2 (n_153), .B1 (n_152), .B2 (n_149),
+       .ZN (n_154));
+  AOI22_X1 g9901(.A1 (n_150), .A2 (n_153), .B1 (n_152), .B2 (n_149),
+       .ZN (n_151));
+  AOI21_X1 g9914(.A1 (n_140), .A2 (payload_length[5]), .B (n_144), .ZN
+       (n_189));
+  INV_X1 g9977(.I (n_143), .ZN (n_148));
+  NOR2_X1 g9824(.A1 (n_147), .A2 (n_97), .ZN (n_169));
+  OAI21_X1 g9898(.A1 (n_145), .A2 (n_78), .B (n_141), .ZN (n_240));
+  INV_X1 g9920(.I (n_144), .ZN (n_159));
+  DFFSNQ_X1 \data_q2_reg[7] (.SN (1'b1), .CLK (clk), .D (n_120), .Q
+       (data_q2[7]));
+  NOR4_X1 g9958(.A1 (n_109), .A2 (data_q[4]), .A3 (data_q[6]), .A4
+       (n_153), .ZN (n_157));
+  AOI22_X1 g9978(.A1 (n_142), .A2 (n_394), .B1 (lrc[0]), .B2 (n_393),
+       .ZN (n_143));
+  DFFSNQ_X1 \data_q2_reg[0] (.SN (1'b1), .CLK (clk), .D (n_125), .Q
+       (data_q2[0]));
+  DFFSNQ_X1 \data_q2_reg[1] (.SN (1'b1), .CLK (clk), .D (n_124), .Q
+       (data_q2[1]));
+  DFFSNQ_X1 \data_q2_reg[3] (.SN (1'b1), .CLK (clk), .D (n_119), .Q
+       (data_q2[3]));
+  DFFSNQ_X1 \data_q2_reg[6] (.SN (1'b1), .CLK (clk), .D (n_118), .Q
+       (data_q2[6]));
+  DFFSNQ_X1 \data_q2_reg[2] (.SN (1'b1), .CLK (clk), .D (n_123), .Q
+       (data_q2[2]));
+  DFFSNQ_X1 \data_q2_reg[5] (.SN (1'b1), .CLK (clk), .D (n_122), .Q
+       (data_q2[5]));
+  DFFSNQ_X1 \data_q2_reg[4] (.SN (1'b1), .CLK (clk), .D (n_121), .Q
+       (data_q2[4]));
+  INV_X1 g9912(.I (n_141), .ZN (n_155));
+  NOR2_X1 g9921(.A1 (n_140), .A2 (payload_length[5]), .ZN (n_144));
+  AOI22_X1 g9944(.A1 (n_136), .A2 (n_73), .B1 (lrc[2]), .B2
+       (data_q[2]), .ZN (n_180));
+  XOR2_X1 g9945(.A1 (n_464), .A2 (n_138), .Z (n_139));
+  XNOR2_X1 g9947(.A1 (n_136), .A2 (n_236), .ZN (n_137));
+  NOR2_X1 g9950(.A1 (n_134), .A2 (n_55), .ZN (n_135));
+  NOR4_X1 g9959(.A1 (n_104), .A2 (data_q[4]), .A3 (data_q[6]), .A4
+       (n_153), .ZN (n_173));
+  NOR2_X1 g9973(.A1 (n_111), .A2 (n_92), .ZN (n_133));
+  XOR2_X1 g9976(.A1 (n_103), .A2 (n_131), .Z (n_132));
+  XOR2_X1 g9992(.A1 (n_100), .A2 (n_105), .Z (n_130));
+  NAND2_X1 g9881(.A1 (n_128), .A2 (state_counter[6]), .ZN (n_147));
+  NOR4_X1 g9913(.A1 (n_98), .A2 (state_counter[13]), .A3
+       (state_counter[4]), .A4 (state_counter[3]), .ZN (n_141));
+  XOR2_X1 g9917(.A1 (n_116), .A2 (state_counter[5]), .Z (n_127));
+  AOI21_X1 g9961(.A1 (n_107), .A2 (payload_length[4]), .B (n_115), .ZN
+       (n_126));
+  INV_X1 g10007(.I (n_394), .ZN (n_178));
+  AND2_X1 g10018(.A1 (data_q1[0]), .A2 (n_336), .Z (n_125));
+  AND2_X1 g10019(.A1 (data_q1[1]), .A2 (n_336), .Z (n_124));
+  AND2_X1 g10020(.A1 (data_q1[2]), .A2 (n_336), .Z (n_123));
+  AND2_X1 g10021(.A1 (data_q1[5]), .A2 (n_336), .Z (n_122));
+  AND2_X1 g10022(.A1 (data_q1[4]), .A2 (n_336), .Z (n_121));
+  AND2_X1 g10023(.A1 (data_q1[7]), .A2 (n_336), .Z (n_120));
+  AND2_X1 g10024(.A1 (data_q1[3]), .A2 (n_336), .Z (n_119));
+  AND2_X1 g10025(.A1 (data_q1[6]), .A2 (n_336), .Z (n_118));
+  HA_X1 g9935(.A (n_10), .B (n_82), .CO (n_117), .S (n_150));
+  NOR2_X1 g9930(.A1 (n_116), .A2 (n_96), .ZN (n_128));
+  INV_X1 g9971(.I (n_115), .ZN (n_140));
+  NOR2_X1 g9974(.A1 (n_114), .A2 (state_counter[3]), .ZN (n_134));
+  OR2_X1 g9979(.A1 (n_44), .A2 (n_94), .Z (n_113));
+  XOR2_X1 g9990(.A1 (n_110), .A2 (data_q[4]), .Z (n_112));
+  XOR2_X1 g9991(.A1 (n_110), .A2 (data_q[2]), .Z (n_111));
+  NAND4_X1 g10004(.A1 (n_85), .A2 (data_q[3]), .A3 (n_86), .A4
+       (data_q[1]), .ZN (n_109));
+  NAND3_X1 g10008(.A1 (n_89), .A2 (n_233), .A3 (n_234), .ZN (n_394));
+  XNOR2_X1 g9962(.A1 (n_95), .A2 (state_counter[4]), .ZN (n_108));
+  NOR2_X1 g9972(.A1 (n_107), .A2 (payload_length[4]), .ZN (n_115));
+  OAI21_X1 g9989(.A1 (n_99), .A2 (n_105), .B (n_74), .ZN (n_136));
+  DFFSNQ_X1 \data_q1_reg[1] (.SN (1'b1), .CLK (clk), .D (n_68), .Q
+       (data_q1[1]));
+  OR4_X1 g10002(.A1 (n_67), .A2 (n_131), .A3 (n_59), .A4 (data_q[2]),
+       .Z (n_104));
+  NAND2_X1 g10003(.A1 (n_79), .A2 (n_101), .ZN (n_103));
+  OAI22_X1 g10012(.A1 (n_101), .A2 (data_q[6]), .B1 (n_53), .B2
+       (n_153), .ZN (n_102));
+  DFFSNQ_X1 \data_q1_reg[7] (.SN (1'b1), .CLK (clk), .D (n_72), .Q
+       (data_q1[7]));
+  DFFSNQ_X1 \data_q1_reg[0] (.SN (1'b1), .CLK (clk), .D (n_69), .Q
+       (data_q1[0]));
+  DFFSNQ_X1 \data_q1_reg[2] (.SN (1'b1), .CLK (clk), .D (n_66), .Q
+       (data_q1[2]));
+  DFFSNQ_X1 \data_q1_reg[3] (.SN (1'b1), .CLK (clk), .D (n_65), .Q
+       (data_q1[3]));
+  DFFSNQ_X1 \data_q1_reg[4] (.SN (1'b1), .CLK (clk), .D (n_64), .Q
+       (data_q1[4]));
+  DFFSNQ_X1 \data_q1_reg[6] (.SN (1'b1), .CLK (clk), .D (n_84), .Q
+       (data_q1[6]));
+  DFFSNQ_X1 \data_q1_reg[5] (.SN (1'b1), .CLK (clk), .D (n_63), .Q
+       (data_q1[5]));
+  NOR2_X1 g10040(.A1 (n_75), .A2 (n_99), .ZN (n_100));
+  NOR2_X1 g10046(.A1 (n_61), .A2 (n_52), .ZN (n_142));
+  NAND4_X1 g9960(.A1 (n_45), .A2 (n_97), .A3 (n_0), .A4 (n_96), .ZN
+       (n_98));
+  NAND2_X1 g9975(.A1 (n_95), .A2 (state_counter[4]), .ZN (n_116));
+  AOI21_X1 g10005(.A1 (n_60), .A2 (payload_length[3]), .B (n_80), .ZN
+       (n_114));
+  OAI22_X1 g10009(.A1 (state_counter[2]), .A2 (n_54), .B1
+       (state_counter[1]), .B2 (n_12), .ZN (n_94));
+  AOI22_X1 g10010(.A1 (n_91), .A2 (data_q[0]), .B1 (n_198), .B2
+       (data_q[1]), .ZN (n_93));
+  OAI22_X1 g10011(.A1 (n_91), .A2 (data_q[0]), .B1 (n_198), .B2
+       (data_q[1]), .ZN (n_92));
+  XNOR2_X1 g10013(.A1 (n_91), .A2 (data_q[7]), .ZN (n_90));
+  AOI21_X1 g10045(.A1 (n_88), .A2 (n_336), .B (n_241), .ZN (n_89));
+  OAI22_X1 g10048(.A1 (n_87), .A2 (data_q[2]), .B1 (lrc[2]), .B2
+       (n_86), .ZN (n_236));
+  OAI22_X1 g10049(.A1 (n_182), .A2 (data_q[3]), .B1 (lrc[3]), .B2
+       (n_131), .ZN (n_152));
+  NOR2_X1 g10063(.A1 (n_71), .A2 (data_q[0]), .ZN (n_85));
+  NOR2_X1 g10070(.A1 (n_83), .A2 (n_70), .ZN (n_84));
+  NOR2_X1 g10001(.A1 (n_57), .A2 (lrc[4]), .ZN (n_82));
+  XOR2_X1 g10014(.A1 (n_56), .A2 (state_counter[3]), .Z (n_81));
+  INV_X1 g10015(.I (n_80), .ZN (n_107));
+  NOR2_X1 g10017(.A1 (n_77), .A2 (n_145), .ZN (n_110));
+  AOI21_X1 g10029(.A1 (n_43), .A2 (n_78), .B (n_77), .ZN (n_79));
+  XOR2_X1 g10030(.A1 (n_33), .A2 (data_q[1]), .Z (n_76));
+  XOR2_X1 g10050(.A1 (lrc[7]), .A2 (data_q[7]), .Z (n_208));
+  INV_X1 g10055(.I (n_74), .ZN (n_75));
+  INV_X1 g10058(.I (n_177), .ZN (n_393));
+  NAND2_X1 g10060(.A1 (n_87), .A2 (n_86), .ZN (n_73));
+  NOR2_X1 g10061(.A1 (n_71), .A2 (n_70), .ZN (n_72));
+  NOR2_X1 g10062(.A1 (n_40), .A2 (n_70), .ZN (n_69));
+  NOR2_X1 g10067(.A1 (n_67), .A2 (n_70), .ZN (n_68));
+  NOR2_X1 g10065(.A1 (n_86), .A2 (n_70), .ZN (n_66));
+  NOR2_X1 g10066(.A1 (n_131), .A2 (n_70), .ZN (n_65));
+  NOR2_X1 g10068(.A1 (n_138), .A2 (n_70), .ZN (n_64));
+  NOR2_X1 g10069(.A1 (n_153), .A2 (n_70), .ZN (n_63));
+  NAND2_X1 g10071(.A1 (n_153), .A2 (data_q[6]), .ZN (n_62));
+  INV_X1 g10074(.I (n_105), .ZN (n_61));
+  NAND2_X1 g10075(.A1 (lrc[0]), .A2 (data_q[0]), .ZN (n_105));
+  NAND2_X1 g10059(.A1 (n_343), .A2 (n_376), .ZN (n_177));
+  NOR2_X1 g10016(.A1 (n_60), .A2 (payload_length[3]), .ZN (n_80));
+  NAND2_X1 g10051(.A1 (data_q[7]), .A2 (data_q[0]), .ZN (n_59));
+  NOR2_X1 g10028(.A1 (n_56), .A2 (n_3), .ZN (n_95));
+  INV_X1 g10047(.I (n_54), .ZN (n_55));
+  INV_X1 g10041(.I (n_101), .ZN (n_53));
+  NOR2_X1 g10052(.A1 (lrc[1]), .A2 (data_q[1]), .ZN (n_99));
+  NOR2_X1 g10053(.A1 (lrc[0]), .A2 (data_q[0]), .ZN (n_52));
+  NAND2_X1 g10054(.A1 (n_37), .A2 (n_336), .ZN (n_51));
+  NAND2_X1 g10056(.A1 (lrc[1]), .A2 (data_q[1]), .ZN (n_74));
+  NOR2_X1 g10057(.A1 (lrc[3]), .A2 (data_q[3]), .ZN (n_50));
+  AND2_X1 g10064(.A1 (n_49), .A2 (n_376), .Z (n_241));
+  NAND2_X1 g10072(.A1 (n_195), .A2 (n_376), .ZN (n_234));
+  NAND2_X1 g10073(.A1 (n_48), .A2 (n_336), .ZN (n_233));
+  NAND2_X1 g10027(.A1 (n_149), .A2 (n_182), .ZN (n_57));
+  OAI22_X1 g10080(.A1 (n_88), .A2 (n_206), .B1 (n_11), .B2 (n_38), .ZN
+       (vld));
+  INV_X1 g10092(.I (data_q[1]), .ZN (n_67));
+  NAND2_X1 g10042(.A1 (n_46), .A2 (n_145), .ZN (n_101));
+  INV_X1 g10076(.I (n_361), .ZN (n_386));
+  NAND2_X1 g10039(.A1 (n_46), .A2 (state_counter[1]), .ZN (n_91));
+  INV_X1 g10088(.I (data_q[4]), .ZN (n_138));
+  NOR4_X1 g10006(.A1 (n_25), .A2 (state_counter[8]), .A3
+       (state_counter[15]), .A4 (state_counter[14]), .ZN (n_45));
+  INV_X1 g10096(.I (data_q[3]), .ZN (n_131));
+  NOR2_X1 g10043(.A1 (n_46), .A2 (n_198), .ZN (n_77));
+  AOI21_X1 g10079(.A1 (n_42), .A2 (payload_length[2]), .B (n_39), .ZN
+       (n_54));
+  OAI22_X1 g10081(.A1 (n_43), .A2 (n_42), .B1 (n_28), .B2
+       (payload_length[0]), .ZN (n_44));
+  AOI22_X1 g10082(.A1 (n_43), .A2 (n_78), .B1 (n_186), .B2
+       (state_counter[2]), .ZN (n_41));
+  INV_X1 g10084(.I (data_q[5]), .ZN (n_153));
+  INV_X1 g10086(.I (data_q[7]), .ZN (n_71));
+  INV_X1 g10090(.I (data_q[6]), .ZN (n_83));
+  INV_X1 g10094(.I (data_q[0]), .ZN (n_40));
+  INV_X1 g10098(.I (data_q[2]), .ZN (n_86));
+  INV_X1 g10110(.I (n_336), .ZN (n_70));
+  DFFSNQ_X1 \data_q_reg[7] (.SN (1'b1), .CLK (clk), .D (n_20), .Q
+       (data_q[7]));
+  INV_X1 g10104(.I (n_39), .ZN (n_60));
+  DFFRNQ_X1 \last_state_reg[3] (.RN (1'b1), .CLK (clk), .D (n_18), .Q
+       (last_state[3]));
+  DFFSNQ_X1 \data_q_reg[0] (.SN (1'b1), .CLK (clk), .D (n_27), .Q
        (data_q[0]));
-  DFFSNQ_X1 \data_q_reg[4] (.SN (1'b1), .CLK (clk), .D (n_24), .Q
+  DFFSNQ_X1 \data_q_reg[5] (.SN (1'b1), .CLK (clk), .D (n_19), .Q
+       (data_q[5]));
+  DFFRNQ_X1 \data_q_reg[6] (.RN (1'b1), .CLK (clk), .D (n_22), .Q
+       (data_q[6]));
+  DFFSNQ_X1 \data_q_reg[1] (.SN (1'b1), .CLK (clk), .D (n_23), .Q
+       (data_q[1]));
+  DFFRNQ_X1 \data_q_reg[2] (.RN (1'b1), .CLK (clk), .D (n_29), .Q
+       (data_q[2]));
+  DFFRNQ_X1 \last_state_reg[2] (.RN (1'b1), .CLK (clk), .D (n_24), .Q
+       (last_state[2]));
+  NOR3_X1 g10077(.A1 (n_193), .A2 (n_38), .A3 (state[2]), .ZN (n_361));
+  DFFSNQ_X1 \data_q_reg[4] (.SN (1'b1), .CLK (clk), .D (n_21), .Q
        (data_q[4]));
-  XOR2_X1 g9815(.A1 (n_215), .A2 (next_state[0]), .Z (n_41));
-  NOR2_X1 g9800(.A1 (n_48), .A2 (payload_length[2]), .ZN (n_45));
-  NOR2_X1 g9805(.A1 (n_40), .A2 (n_39), .ZN (n_50));
-  AOI22_X1 g9813(.A1 (n_37), .A2 (next_state[3]), .B1 (n_250), .B2
-       (next_state[1]), .ZN (n_38));
-  NAND2_X1 g9731(.A1 (n_36), .A2 (n_46), .ZN (n_163));
-  NAND2_X1 g9802(.A1 (n_61), .A2 (n_218), .ZN (n_42));
-  NAND2_X1 g9804(.A1 (state[1]), .A2 (n_218), .ZN (n_184));
-  OAI22_X1 g9814(.A1 (n_37), .A2 (next_state[3]), .B1 (n_250), .B2
-       (next_state[1]), .ZN (n_35));
-  INV_X1 g9774(.I (n_132), .ZN (n_34));
-  OAI22_X1 g9817(.A1 (lrc[1]), .A2 (n_32), .B1 (n_31), .B2 (lrc[0]),
+  DFFSNQ_X1 \data_q_reg[3] (.SN (1'b1), .CLK (clk), .D (n_26), .Q
+       (data_q[3]));
+  NOR2_X1 g10106(.A1 (n_37), .A2 (n_36), .ZN (n_49));
+  NOR2_X1 g10108(.A1 (n_37), .A2 (n_206), .ZN (n_343));
+  NAND2_X1 g10109(.A1 (n_43), .A2 (state_counter[2]), .ZN (n_56));
+  NOR2_X1 g10111(.A1 (n_206), .A2 (rst), .ZN (n_336));
+  NOR2_X1 g10112(.A1 (n_35), .A2 (n_206), .ZN (n_195));
+  DFFRNQ_X1 \last_state_reg[0] (.RN (1'b1), .CLK (clk), .D (n_17), .Q
+       (last_state[0]));
+  DFFRNQ_X1 \last_state_reg[1] (.RN (1'b1), .CLK (clk), .D (n_15), .Q
+       (last_state[1]));
+  AND2_X1 g10107(.A1 (n_88), .A2 (n_174), .Z (rdy));
+  OAI22_X1 g10113(.A1 (n_5), .A2 (lrc[1]), .B1 (n_32), .B2 (lrc[0]),
        .ZN (n_33));
-  INV_X1 g9843(.I (n_57), .ZN (n_65));
-  INV_X1 g9848(.I (n_174), .ZN (n_58));
-  HA_X1 g9773(.A (state_counter[1]), .B (state_counter[2]), .CO (n_30),
-       .S (n_52));
-  AND2_X1 g9821(.A1 (n_108), .A2 (data[1]), .Z (n_29));
-  AND2_X1 g9826(.A1 (n_108), .A2 (data[7]), .Z (n_28));
-  AND2_X1 g9818(.A1 (next_state[0]), .A2 (n_108), .Z (n_27));
-  XOR2_X1 g9816(.A1 (state[2]), .A2 (next_state[2]), .Z (n_26));
-  NOR4_X1 g9769(.A1 (state_counter[10]), .A2 (state_counter[8]), .A3
-       (state_counter[7]), .A4 (state_counter[15]), .ZN (n_25));
-  NAND2_X1 g9841(.A1 (n_2), .A2 (state_counter[0]), .ZN (n_132));
-  AND2_X1 g9827(.A1 (n_108), .A2 (data[4]), .Z (n_24));
-  AND2_X1 g9820(.A1 (next_state[2]), .A2 (n_108), .Z (n_23));
-  AND2_X1 g9822(.A1 (next_state[3]), .A2 (n_108), .Z (n_22));
-  NOR2_X1 g9847(.A1 (n_37), .A2 (rst), .ZN (n_21));
-  NAND2_X1 g9842(.A1 (n_1), .A2 (state_counter[1]), .ZN (n_20));
-  NAND2_X1 g9845(.A1 (n_11), .A2 (state[3]), .ZN (n_60));
-  AND2_X1 g9828(.A1 (n_108), .A2 (data[2]), .Z (n_19));
-  AND2_X1 g9823(.A1 (next_state[1]), .A2 (n_108), .Z (n_18));
-  NOR2_X1 g9851(.A1 (n_250), .A2 (rst), .ZN (n_17));
-  AND2_X1 g9819(.A1 (n_108), .A2 (data[0]), .Z (n_16));
-  AND2_X1 g9825(.A1 (n_108), .A2 (data[5]), .Z (n_15));
-  AND2_X1 g9829(.A1 (n_108), .A2 (data[3]), .Z (n_14));
-  INV_X1 g9831(.I (n_39), .ZN (n_47));
-  INV_X1 g9835(.I (n_83), .ZN (n_43));
-  INV_X1 g9839(.I (n_61), .ZN (n_68));
-  AND2_X1 g9824(.A1 (n_108), .A2 (data[6]), .Z (n_13));
-  NAND2_X1 g9844(.A1 (n_37), .A2 (state[2]), .ZN (n_57));
-  NOR2_X1 g9846(.A1 (n_11), .A2 (rst), .ZN (n_12));
-  NOR2_X1 g9850(.A1 (n_215), .A2 (rst), .ZN (n_10));
-  NOR2_X1 g9849(.A1 (n_215), .A2 (state[1]), .ZN (n_174));
-  NOR2_X1 g9838(.A1 (state[0]), .A2 (state[3]), .ZN (n_9));
-  NOR2_X1 g9840(.A1 (state[1]), .A2 (state[0]), .ZN (n_61));
-  NOR2_X1 g9834(.A1 (state[3]), .A2 (state[2]), .ZN (n_218));
-  NOR2_X1 g9836(.A1 (state_counter[1]), .A2 (state_counter[0]), .ZN
-       (n_83));
-  NOR2_X1 g9837(.A1 (lrc[1]), .A2 (lrc[0]), .ZN (n_36));
-  NAND2_X1 g9833(.A1 (payload_length[0]), .A2 (payload_length[1]), .ZN
-       (n_8));
-  OR2_X1 g9830(.A1 (payload_length[1]), .A2 (payload_length[0]), .Z
-       (n_48));
-  NAND2_X1 g9832(.A1 (state_counter[0]), .A2 (state_counter[1]), .ZN
-       (n_39));
-  INV_X1 g9875(.I (state_counter[13]), .ZN (n_7));
-  INV_X1 g9878(.I (payload_length[5]), .ZN (n_6));
-  INV_X1 g9871(.I (state[1]), .ZN (n_250));
-  INV_X1 g9873(.I (lrc[3]), .ZN (n_5));
-  INV_X1 g9872(.I (lrc[7]), .ZN (n_95));
-  INV_X1 g9867(.I (state_counter[5]), .ZN (n_4));
-  INV_X1 g9857(.I (state_counter[3]), .ZN (n_53));
-  INV_X1 g9880(.I (rst), .ZN (n_108));
-  INV_X1 g9868(.I (state_counter[9]), .ZN (n_54));
-  INV_X1 g9874(.I (state[2]), .ZN (n_11));
-  INV_X1 g9866(.I (state_counter[6]), .ZN (n_236));
-  INV_X1 g9876(.I (payload_length[14]), .ZN (n_273));
-  INV_X1 g9870(.I (lrc[4]), .ZN (n_89));
-  INV_X1 g9877(.I (lrc[5]), .ZN (n_3));
-  INV_X1 g9856(.I (payload_length[12]), .ZN (n_277));
-  INV_X1 g9864(.I (state_counter[1]), .ZN (n_2));
-  INV_X1 g9869(.I (lrc[2]), .ZN (n_46));
-  INV_X1 g9862(.I (state_counter[11]), .ZN (n_275));
-  INV_X1 g9860(.I (state_counter[2]), .ZN (n_40));
-  INV_X1 g9863(.I (lrc[0]), .ZN (n_32));
-  INV_X1 g9858(.I (state[0]), .ZN (n_215));
-  INV_X1 g9859(.I (lrc[1]), .ZN (n_31));
-  INV_X1 g9854(.I (state[3]), .ZN (n_37));
-  INV_X1 g9853(.I (payload_length[6]), .ZN (n_172));
-  INV_X1 g9852(.I (state_counter[0]), .ZN (n_1));
-  INV_X1 g9879(.I (lrc[6]), .ZN (n_158));
-  INV_X1 g9855(.I (state_counter[7]), .ZN (n_0));
-  INV_X1 g9861(.I (state_counter[4]), .ZN (n_85));
-  INV_X1 g9865(.I (payload_length[4]), .ZN (n_112));
-  XNOR2_X1 g2(.A1 (n_346), .A2 (state_counter[14]), .ZN (n_454));
-  XNOR2_X1 g9989(.A1 (n_280), .A2 (state_counter[12]), .ZN (n_455));
-  XNOR2_X1 g9990(.A1 (n_245), .A2 (state_counter[10]), .ZN (n_456));
-  XNOR2_X1 g9991(.A1 (n_178), .A2 (state_counter[8]), .ZN (n_457));
-  XNOR2_X1 g9992(.A1 (n_110), .A2 (state_counter[5]), .ZN (n_458));
+  AND2_X1 g10044(.A1 (n_235), .A2 (n_87), .Z (n_149));
+  INV_X1 g10142(.I (n_193), .ZN (n_48));
+  NOR2_X1 g10105(.A1 (n_42), .A2 (payload_length[2]), .ZN (n_39));
+  HA_X1 g10083(.A (state_counter[2]), .B (state_counter[1]), .CO
+       (n_30), .S (n_46));
+  AND2_X1 g10114(.A1 (n_376), .A2 (data[2]), .Z (n_29));
+  INV_X1 g10122(.I (n_145), .ZN (n_28));
+  AND2_X1 g10118(.A1 (n_376), .A2 (data[0]), .Z (n_27));
+  NAND2_X1 g10141(.A1 (n_38), .A2 (state[2]), .ZN (n_206));
+  INV_X1 g10126(.I (n_186), .ZN (n_43));
+  AND2_X1 g10117(.A1 (n_376), .A2 (data[3]), .Z (n_26));
+  OR4_X1 g10078(.A1 (state_counter[11]), .A2 (state_counter[10]), .A3
+       (state_counter[12]), .A4 (state_counter[9]), .Z (n_25));
+  NOR2_X1 g10140(.A1 (n_7), .A2 (rst), .ZN (n_24));
+  AND2_X1 g10115(.A1 (n_376), .A2 (data[1]), .Z (n_23));
+  AND2_X1 g10116(.A1 (n_376), .A2 (data[6]), .Z (n_22));
+  AND2_X1 g10119(.A1 (n_376), .A2 (data[4]), .Z (n_21));
+  AND2_X1 g10120(.A1 (n_376), .A2 (data[7]), .Z (n_20));
+  AND2_X1 g10121(.A1 (n_376), .A2 (data[5]), .Z (n_19));
+  INV_X1 g10131(.I (n_174), .ZN (n_36));
+  NAND2_X1 g10135(.A1 (n_319), .A2 (payload_length[13]), .ZN (n_398));
+  NOR2_X1 g10144(.A1 (n_38), .A2 (rst), .ZN (n_18));
+  NOR2_X1 g10145(.A1 (n_14), .A2 (rst), .ZN (n_17));
+  NAND2_X1 g10134(.A1 (n_4), .A2 (state_counter[1]), .ZN (n_16));
+  NAND2_X1 g10136(.A1 (n_2), .A2 (state_counter[0]), .ZN (n_198));
+  NOR2_X1 g10139(.A1 (n_13), .A2 (rst), .ZN (n_15));
+  NAND2_X1 g10138(.A1 (n_14), .A2 (state[1]), .ZN (n_35));
+  NAND2_X1 g10143(.A1 (n_13), .A2 (state[0]), .ZN (n_193));
+  NAND2_X1 g10127(.A1 (state_counter[0]), .A2 (state_counter[1]), .ZN
+       (n_186));
+  NAND2_X1 g10129(.A1 (payload_length[0]), .A2 (payload_length[1]), .ZN
+       (n_12));
+  NOR2_X1 g10125(.A1 (lrc[1]), .A2 (lrc[0]), .ZN (n_235));
+  NOR2_X1 g10123(.A1 (state_counter[1]), .A2 (state_counter[0]), .ZN
+       (n_145));
+  NOR2_X1 g10132(.A1 (state[3]), .A2 (state[2]), .ZN (n_174));
+  NAND2_X1 g10130(.A1 (state[0]), .A2 (state[1]), .ZN (n_37));
+  OR2_X1 g10133(.A1 (state[1]), .A2 (state[2]), .Z (n_11));
+  NOR2_X1 g10128(.A1 (state[1]), .A2 (state[0]), .ZN (n_88));
+  OR2_X1 g10124(.A1 (payload_length[1]), .A2 (payload_length[0]), .Z
+       (n_42));
+  INV_X1 g10148(.I (lrc[5]), .ZN (n_10));
+  INV_X1 g10166(.I (state_counter[11]), .ZN (n_9));
+  INV_X1 g10151(.I (lrc[6]), .ZN (n_8));
+  INV_X1 g10162(.I (lrc[3]), .ZN (n_182));
+  INV_X1 g10163(.I (state_counter[13]), .ZN (n_319));
+  INV_X1 g10164(.I (state[0]), .ZN (n_14));
+  INV_X1 g10153(.I (state_counter[7]), .ZN (n_97));
+  INV_X1 g10169(.I (rst), .ZN (n_376));
+  INV_X1 g10161(.I (payload_length[12]), .ZN (n_305));
+  INV_X1 g10167(.I (state[2]), .ZN (n_7));
+  INV_X1 g10156(.I (payload_length[14]), .ZN (n_303));
+  INV_X1 g10158(.I (state[3]), .ZN (n_38));
+  INV_X1 g10160(.I (state_counter[9]), .ZN (n_6));
+  INV_X1 g10168(.I (lrc[0]), .ZN (n_5));
+  INV_X1 g10157(.I (state_counter[0]), .ZN (n_4));
+  INV_X1 g10152(.I (state_counter[5]), .ZN (n_96));
+  INV_X1 g10165(.I (state[1]), .ZN (n_13));
+  INV_X1 g10150(.I (state_counter[2]), .ZN (n_78));
+  INV_X1 g10147(.I (state_counter[3]), .ZN (n_3));
+  INV_X1 g10149(.I (lrc[2]), .ZN (n_87));
+  INV_X1 g10154(.I (lrc[1]), .ZN (n_32));
+  INV_X1 g10146(.I (state_counter[1]), .ZN (n_2));
+  INV_X1 g10159(.I (payload_length[13]), .ZN (n_1));
+  INV_X1 g10155(.I (state_counter[6]), .ZN (n_0));
+  XNOR2_X1 g2(.A1 (n_329), .A2 (state_counter[14]), .ZN (n_459));
+  XNOR2_X1 g10274(.A1 (n_269), .A2 (state_counter[12]), .ZN (n_460));
+  XNOR2_X1 g10275(.A1 (n_215), .A2 (state_counter[10]), .ZN (n_461));
+  XNOR2_X1 g10276(.A1 (n_169), .A2 (state_counter[8]), .ZN (n_462));
+  XNOR2_X1 g10277(.A1 (n_128), .A2 (state_counter[6]), .ZN (n_463));
+  XNOR2_X1 g10278(.A1 (n_57), .A2 (lrc[4]), .ZN (n_464));
+  OAI21_X1 g10279(.A1 (n_465), .A2 (n_35), .B (n_310), .ZN (n_466));
+  NAND2_X1 g3(.A1 (n_174), .A2 (n_173), .ZN (n_465));
 endmodule
 
