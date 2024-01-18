@@ -1,6 +1,6 @@
 # HDL Ethernet Receiver
 
-Simple ethernet receiver implemented in SystemVerilog.
+Simple ethernet receiver implemented in SystemVerilog: [design specification](Ethernet%20Receiver%20Specification.pdf).
 
 ## Setup
 
